@@ -52,7 +52,6 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const saveDiagramToBackend = useMemo(
         () =>
             debounce(async (diagram: Diagram) => {
-                console.log('DEBUG: saveDiagramToBackend', diagram.id, diagram);
                 try {
                     const payload = {
                         name: diagram.name,
@@ -72,17 +71,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         `${API_URL}/diagrams/${diagram.id}`,
                         payload
                     );
-                    const response = await fetch(
-                        `${API_URL}/diagrams/${diagram.id}`,
-                        {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(payload),
-                        }
-                    );
-                    console.log('DEBUG: PUT response status', response.status);
+                    await fetch(`${API_URL}/diagrams/${diagram.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload),
+                    });
                 } catch (error) {
                     console.error('Failed to save diagram to backend:', error);
                 }
