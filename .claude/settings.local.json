@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(less ./ui/src/context/storage-context/storage-provider.tsx)",
+      "Bash(npm run *)",
+      "Bash(curl *)",
+      "Bash(docker exec chartdb2-postgres-1 *)"
+    ]
+  }
+}
