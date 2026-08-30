@@ -37,3 +37,8 @@ shared across a team (MPWT).
 - ✅ Local dev workflow: API + DB run via Docker Compose, Frontend runs 
   separately via `npm run dev` pointing to API at http://localhost:3000
 - ✅ Git initialized, committed at each major milestone
+
+
+- ✅ Login/Register UI redesigned: floating card layout with frosted-glass 
+  transparency, chart decorations, matches design reference. Both light 
+  and dark mode verified consistent.
