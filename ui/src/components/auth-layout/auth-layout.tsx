@@ -295,7 +295,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
                 </div>
 
                 {/* Overlapping Translucent Login/Auth Card on Right */}
-                <div className="relative z-20 w-full rounded-3xl border border-white/90 bg-white/85 p-8 shadow-[0_20px_50px_rgba(15,39,68,0.16)] backdrop-blur-2xl dark:border-zinc-700/60 dark:bg-zinc-900/85 sm:p-10 lg:my-auto lg:w-[400px]">
+                <div className="relative z-20 w-full rounded-3xl border border-white/20 bg-white/70 p-8 shadow-[0_20px_50px_rgba(15,39,68,0.16)] backdrop-blur-xl dark:border-zinc-700/30 dark:bg-zinc-900/70 sm:p-10 lg:my-auto lg:w-[400px]">
                     {/* Page Title */}
                     <div className="mb-8 text-center">
                         <h2 className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-500 sm:text-3xl">
