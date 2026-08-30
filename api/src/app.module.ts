@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { envConfig } from './config/env.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { DiagramsModule } from './modules/diagrams/diagrams.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DiagramsModule } from './modules/diagrams/diagrams.module';
       useFactory: getTypeOrmConfig,
     }),
     DiagramsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

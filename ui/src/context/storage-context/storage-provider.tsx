@@ -9,6 +9,7 @@ import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { debounce } from '@/lib/utils';
+import { apiFetch } from '../../lib/api-fetch';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -71,7 +72,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         `${API_URL}/diagrams/${diagram.id}`,
                         payload
                     );
-                    await fetch(`${API_URL}/diagrams/${diagram.id}`, {
+                    await apiFetch(`${API_URL}/diagrams/${diagram.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -614,7 +615,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         notes: diagram.notes || [],
                     },
                 };
-                await fetch(`${API_URL}/diagrams`, {
+                await apiFetch(`${API_URL}/diagrams`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -631,7 +632,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const listDiagrams: StorageContext['listDiagrams'] =
         useCallback(async (): Promise<Diagram[]> => {
             try {
-                const response = await fetch(`${API_URL}/diagrams`);
+                const response = await apiFetch(`${API_URL}/diagrams`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch diagrams');
                 }
@@ -665,7 +666,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const getDiagram: StorageContext['getDiagram'] = useCallback(
         async (id: string): Promise<Diagram | undefined> => {
             try {
-                const response = await fetch(`${API_URL}/diagrams/${id}`);
+                const response = await apiFetch(`${API_URL}/diagrams/${id}`);
                 if (!response.ok) {
                     return diagramsCache.current.get(id);
                 }
@@ -708,7 +709,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         async (id) => {
             diagramsCache.current.delete(id);
             try {
-                await fetch(`${API_URL}/diagrams/${id}`, {
+                await apiFetch(`${API_URL}/diagrams/${id}`, {
                     method: 'DELETE',
                 });
             } catch (error) {

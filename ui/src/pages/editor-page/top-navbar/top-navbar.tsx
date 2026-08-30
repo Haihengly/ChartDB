@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
+import { UserNav } from './user-nav/user-nav';
 import { Menu } from './menu/menu';
 
 export interface TopNavbarProps {}
@@ -50,6 +51,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 <LastSaved />
                 {renderStars()}
                 <LanguageNav />
+                <UserNav />
             </div>
         </nav>
     );
