@@ -53,7 +53,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
                 <div className="pointer-events-none absolute -inset-20 overflow-visible">
                     {/* Top-Right Bar Chart & Connected Line Chart with Red Nodes */}
                     <svg
-                        className="absolute -right-20 -top-20 h-72 w-96 text-blue-500/60 dark:text-blue-600/40"
+                        className="absolute -right-12 -top-12 h-80 w-[460px] text-blue-600/70 dark:text-blue-500/50"
                         viewBox="0 0 320 220"
                         fill="none"
                     >
@@ -139,7 +139,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
 
                     {/* Bottom Bar Chart & Line Graph */}
                     <svg
-                        className="absolute -bottom-20 -left-20 h-64 w-[480px] text-blue-500/60 dark:text-blue-600/40"
+                        className="absolute -bottom-16 -left-16 h-72 w-[520px] text-blue-600/70 dark:text-blue-500/50"
                         viewBox="0 0 440 200"
                         fill="none"
                     >
@@ -250,7 +250,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
                 </div>
 
                 {/* Main Unified Floating Card */}
-                <div className="relative z-10 flex w-full flex-col items-center justify-between gap-8 rounded-[2.5rem] border border-white/80 bg-white/30 p-6 shadow-[0_25px_60px_rgba(15,39,68,0.12)] backdrop-blur-md dark:border-white/10 dark:bg-zinc-950/30 sm:p-10 lg:min-h-[620px] lg:flex-row lg:items-stretch lg:p-12">
+                <div className="relative z-10 flex w-full flex-col items-center justify-between gap-8 rounded-[2.5rem] border border-white/80 bg-white/10 p-6 shadow-[0_25px_60px_rgba(15,39,68,0.12)] backdrop-blur-sm dark:border-white/10 dark:bg-zinc-950/20 sm:p-10 lg:min-h-[620px] lg:flex-row lg:items-stretch lg:p-12">
                     {/* Left Branding Area */}
                     <div className="flex w-full flex-col justify-between lg:w-[54%]">
                         <div>
@@ -300,7 +300,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
                     </div>
 
                     {/* Overlapping Translucent Login/Auth Card on Right */}
-                    <div className="relative z-20 w-full rounded-3xl border border-white/20 bg-white/50 p-8 shadow-[0_20px_50px_rgba(15,39,68,0.16)] backdrop-blur-md dark:border-zinc-700/30 dark:bg-zinc-950/50 sm:p-10 lg:my-auto lg:w-[400px]">
+                    <div className="relative z-20 w-full rounded-3xl border border-white/20 bg-white/30 p-8 shadow-[0_20px_50px_rgba(15,39,68,0.16)] backdrop-blur-xl dark:border-zinc-700/30 dark:bg-zinc-950/45 sm:p-10 lg:my-auto lg:w-[400px]">
                         {/* Page Title */}
                         <div className="mb-8 text-center">
                             <h2 className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-500 sm:text-3xl">
