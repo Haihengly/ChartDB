@@ -54,66 +54,53 @@ export const RegisterPage: React.FC = () => {
     };
 
     return (
-        <AuthLayout
-            title="Create an account"
-            description="Start visualizing your databases in seconds."
-        >
+        <AuthLayout title="Register">
             {error && (
-                <div className="mb-6 rounded-lg bg-red-100 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                <div className="mb-6 rounded-lg bg-red-100 p-3 text-xs text-red-700 dark:bg-red-900/30 dark:text-red-400">
                     {error}
                 </div>
             )}
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Email address
-                        </label>
-                        <div className="relative mt-1">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Mail className="size-5 text-gray-400" />
-                            </div>
+                        <div className="relative">
                             <input
                                 type="email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="block w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white sm:text-sm"
-                                placeholder="you@example.com"
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Email"
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <Mail className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Password
-                        </label>
-                        <div className="relative mt-1">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Lock className="size-5 text-gray-400" />
-                            </div>
+                        <div className="relative">
                             <input
                                 type="password"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="block w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white sm:text-sm"
-                                placeholder="••••••••"
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Password"
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
-                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        <p className="mt-1.5 text-xs text-slate-500 dark:text-zinc-400">
                             Must be at least 8 characters with uppercase,
                             lowercase, and a number.
                         </p>
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Confirm password
-                        </label>
-                        <div className="relative mt-1">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Lock className="size-5 text-gray-400" />
-                            </div>
+                        <div className="relative">
                             <input
                                 type="password"
                                 required
@@ -121,31 +108,34 @@ export const RegisterPage: React.FC = () => {
                                 onChange={(e) =>
                                     setConfirmPassword(e.target.value)
                                 }
-                                className="block w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white sm:text-sm"
-                                placeholder="••••••••"
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Confirm Password"
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div>
+                <div className="pt-2">
                     <button
                         type="submit"
                         disabled={loading}
-                        className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                        className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                     >
                         {loading ? 'Creating account...' : 'Sign up'}
                     </button>
                 </div>
             </form>
 
-            <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-8 text-center text-xs text-slate-600 dark:text-zinc-400 sm:text-sm">
                 Already have an account?{' '}
                 <Link
                     to="/login"
-                    className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                    className="font-semibold text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-400"
                 >
-                    Sign in
+                    Log in
                 </Link>
             </p>
         </AuthLayout>

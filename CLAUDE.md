@@ -38,3 +38,13 @@ shared across a team (MPWT).
 - ✅ Authentication working: JWT-based login/register, per-user diagram 
   isolation, legacy diagrams (no owner) remain globally visible
 - Git initialized, committed at each major milestone
+
+## Current state
+- ✅ Persistence working: diagrams save to Postgres, survive refresh
+- ✅ Cleanup done: removed dead IndexedDB/Dexie code, debug logs
+- ✅ Authentication working: JWT-based login/register, password strength 
+  validation, per-user diagram isolation, legacy diagrams remain globally 
+  visible
+- ✅ Login/Register UI redesigned: floating card layout with branding panel, 
+  feature highlights, chart decorations, matches design reference at 
+  login-reference.png

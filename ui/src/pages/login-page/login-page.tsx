@@ -47,98 +47,83 @@ export const LoginPage: React.FC = () => {
     };
 
     return (
-        <AuthLayout
-            title="Log in to ChartDB"
-            description="Welcome back! Please enter your details."
-        >
+        <AuthLayout title="Login">
             {error && (
-                <div className="mb-6 rounded-lg bg-red-100 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                <div className="mb-6 rounded-lg bg-red-100 p-3 text-xs text-red-700 dark:bg-red-900/30 dark:text-red-400">
                     {error}
                 </div>
             )}
 
             <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="space-y-4">
+                <div className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Email address
-                        </label>
-                        <div className="relative mt-1">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Mail className="size-5 text-gray-400" />
-                            </div>
+                        <div className="relative">
                             <input
                                 type="email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="block w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white sm:text-sm"
-                                placeholder="you@example.com"
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Email"
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <Mail className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Password
-                        </label>
-                        <div className="relative mt-1">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Lock className="size-5 text-gray-400" />
-                            </div>
+                        <div className="relative">
                             <input
                                 type="password"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="block w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white sm:text-sm"
-                                placeholder="••••••••"
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Password"
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
+                <div className="flex items-center justify-between pt-1">
+                    <label className="flex cursor-pointer items-center gap-2 text-xs text-slate-700 dark:text-zinc-300 sm:text-sm">
                         <input
                             id="remember-me"
                             name="remember-me"
                             type="checkbox"
-                            className="size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:ring-offset-zinc-800"
+                            className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800"
                         />
-                        <label
-                            htmlFor="remember-me"
-                            className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
-                        >
-                            Remember me
-                        </label>
-                    </div>
+                        <span>Remember me</span>
+                    </label>
 
-                    <div className="text-sm">
-                        <a
-                            href="#"
-                            className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
-                        >
-                            Forgot password?
-                        </a>
-                    </div>
+                    <a
+                        href="#"
+                        className="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 sm:text-sm"
+                    >
+                        Forgot Password?
+                    </a>
                 </div>
 
                 <div>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                        className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                     >
-                        {loading ? 'Logging in...' : 'Log in'}
+                        {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </div>
             </form>
 
-            <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-8 text-center text-xs text-slate-600 dark:text-zinc-400 sm:text-sm">
                 Don't have an account?{' '}
                 <Link
                     to="/register"
-                    className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                    className="font-semibold text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-400"
                 >
                     Register
                 </Link>
