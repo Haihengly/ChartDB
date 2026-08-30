@@ -10,12 +10,6 @@ shared across a team (MPWT).
 - /ui — ChartDB frontend (React/Vite), forked and modified
 - /api — NestJS backend, handles diagram CRUD + Postgres
 
-## Current state (update this as things change)
-- ✅ Persistence working: diagrams save to Postgres, survive refresh
-- ✅ Cleanup done: removed dead IndexedDB/Dexie code, debug logs
-- ✅ Git initialized, committed at each major milestone
-- ✅ JWT Authentication added: user isolation on diagrams, registration/login, route guards, token persistence, and logout support
-
 ## Known history / bugs already fixed (don't reintroduce)
 - Tables previously saved as empty {} — fixed, verify full diagram state 
   (tables, columns, relationships, positions) is included in save payload
@@ -31,14 +25,6 @@ shared across a team (MPWT).
   reporting something as "done" — don't just report code was written
 - Commit to git after each verified milestone
 
-
-## Current state
-- ✅ Persistence working: diagrams save to Postgres, survive refresh
-- ✅ Cleanup done: removed dead IndexedDB/Dexie code, debug logs
-- ✅ Authentication working: JWT-based login/register, per-user diagram 
-  isolation, legacy diagrams (no owner) remain globally visible
-- Git initialized, committed at each major milestone
-
 ## Current state
 - ✅ Persistence working: diagrams save to Postgres, survive refresh
 - ✅ Cleanup done: removed dead IndexedDB/Dexie code, debug logs
@@ -48,3 +34,6 @@ shared across a team (MPWT).
 - ✅ Login/Register UI redesigned: floating card layout with branding panel, 
   feature highlights, chart decorations, matches design reference at 
   login-reference.png
+- ✅ Local dev workflow: API + DB run via Docker Compose, Frontend runs 
+  separately via `npm run dev` pointing to API at http://localhost:3000
+- ✅ Git initialized, committed at each major milestone
