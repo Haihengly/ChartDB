@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -16,8 +16,22 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
+    const { email, password } = registerDto;
+
+    // Validate password
+    if (!password || password.length < 8) {
+      throw new BadRequestException('Password must be at least 8 characters and include uppercase, lowercase, and a number');
+    }
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      throw new BadRequestException('Password must be at least 8 characters and include uppercase, lowercase, and a number');
+    }
+
     const existing = await this.usersRepository.findOne({
-      where: { email: registerDto.email },
+      where: { email },
     });
 
     if (existing) {

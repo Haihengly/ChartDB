@@ -30,3 +30,11 @@ shared across a team (MPWT).
 - Always verify changes yourself (create diagram, refresh, confirm) before 
   reporting something as "done" — don't just report code was written
 - Commit to git after each verified milestone
+
+
+## Current state
+- ✅ Persistence working: diagrams save to Postgres, survive refresh
+- ✅ Cleanup done: removed dead IndexedDB/Dexie code, debug logs
+- ✅ Authentication working: JWT-based login/register, per-user diagram 
+  isolation, legacy diagrams (no owner) remain globally visible
+- Git initialized, committed at each major milestone
