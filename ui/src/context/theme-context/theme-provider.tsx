@@ -19,8 +19,10 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
 
     const systemTheme = isDarkSystemTheme ? 'dark' : 'light';
 
-    const [effectiveTheme, setEffectiveTheme] =
-        useState<EffectiveTheme>(systemTheme);
+    const [effectiveTheme, setEffectiveTheme] = useState<EffectiveTheme>(() => {
+        if (theme === 'system') return systemTheme;
+        return theme as EffectiveTheme;
+    });
 
     useEffect(() => {
         setEffectiveTheme(theme === 'system' ? systemTheme : theme);
