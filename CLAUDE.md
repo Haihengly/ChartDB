@@ -37,6 +37,7 @@ shared across a team (MPWT).
 - ✅ Local dev workflow: API + DB run via Docker Compose, Frontend runs 
   separately via `npm run dev` pointing to API at http://localhost:3000
 - ✅ Git initialized, committed at each major milestone
+- ✅ Login/Register UX: added password visibility toggle and real-time password requirement checklist for registration.
 
 
 - ✅ Login/Register UI redesigned: floating card layout with frosted-glass 

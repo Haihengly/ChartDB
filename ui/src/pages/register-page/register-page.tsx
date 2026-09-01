@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Eye, EyeOff, Check, X } from 'lucide-react';
 import { AuthLayout } from '@/components/auth-layout/auth-layout';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -9,9 +9,18 @@ export const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const passwordRequirements = [
+        { label: '8 characters', met: password.length >= 8 },
+        { label: 'Uppercase letter', met: /[A-Z]/.test(password) },
+        { label: 'Lowercase letter', met: /[a-z]/.test(password) },
+        { label: 'Number', met: /[0-9]/.test(password) },
+    ];
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -82,27 +91,50 @@ export const RegisterPage: React.FC = () => {
                     <div>
                         <div className="relative">
                             <input
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
                                 placeholder="Password"
                             />
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
-                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 flex items-center pr-1 text-blue-600 hover:text-blue-700 focus:outline-none dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="size-5" />
+                                ) : (
+                                    <Eye className="size-5" />
+                                )}
+                            </button>
                         </div>
-                        <p className="mt-1.5 text-xs text-slate-500 dark:text-zinc-400">
-                            Must be at least 8 characters with uppercase,
-                            lowercase, and a number.
-                        </p>
+                        <div className="mt-2.5 space-y-1.5 text-xs">
+                            {passwordRequirements.map((req, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex items-center gap-1.5 transition-colors ${
+                                        req.met
+                                            ? 'font-medium text-emerald-600 dark:text-emerald-400'
+                                            : 'text-slate-400 dark:text-zinc-500'
+                                    }`}
+                                >
+                                    {req.met ? (
+                                        <Check className="size-3.5 stroke-[2.5]" />
+                                    ) : (
+                                        <X className="size-3.5" />
+                                    )}
+                                    <span>{req.label}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <div>
                         <div className="relative">
                             <input
-                                type="password"
+                                type={showConfirmPassword ? 'text' : 'password'}
                                 required
                                 value={confirmPassword}
                                 onChange={(e) =>
@@ -111,9 +143,19 @@ export const RegisterPage: React.FC = () => {
                                 className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
                                 placeholder="Confirm Password"
                             />
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
-                            </div>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowConfirmPassword(!showConfirmPassword)
+                                }
+                                className="absolute inset-y-0 right-0 flex items-center pr-1 text-blue-600 hover:text-blue-700 focus:outline-none dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeOff className="size-5" />
+                                ) : (
+                                    <Eye className="size-5" />
+                                )}
+                            </button>
                         </div>
                     </div>
                 </div>

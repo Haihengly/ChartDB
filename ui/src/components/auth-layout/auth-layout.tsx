@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, Activity, Zap, TrendingUp } from 'lucide-react';
-import ChartDBLogo from '@/assets/mpwt-logo.png';
-import ChartDBDarkLogo from '@/assets/mpwt-logo.png';
+import ChartDBLogo from '@/assets/logo-light.png';
+import ChartDBDarkLogo from '@/assets/logo-dark.png';
 
 export interface AuthLayoutProps {
     title: string;
@@ -292,10 +292,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
                                     </div>
                                 </div>
                             ))}
-                        </div>
-
-                        <div className="text-xs text-[#627d98] dark:text-zinc-500 sm:text-sm">
-                            &copy; 2026 ChartDB
                         </div>
                     </div>
 

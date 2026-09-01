@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Eye, EyeOff } from 'lucide-react';
 import { AuthLayout } from '@/components/auth-layout/auth-layout';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 export const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -75,16 +76,24 @@ export const LoginPage: React.FC = () => {
                     <div>
                         <div className="relative">
                             <input
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
                                 placeholder="Password"
                             />
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-                                <Lock className="size-5 text-blue-600 dark:text-blue-400" />
-                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 flex items-center pr-1 text-blue-600 hover:text-blue-700 focus:outline-none dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="size-5" />
+                                ) : (
+                                    <Eye className="size-5" />
+                                )}
+                            </button>
                         </div>
                     </div>
                 </div>
