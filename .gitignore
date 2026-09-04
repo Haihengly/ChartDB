@@ -48,4 +48,5 @@ coverage/
 CLAUDE.md
 .claude/
 
-sql/
+sql/.claude/
+CLAUDE.md
