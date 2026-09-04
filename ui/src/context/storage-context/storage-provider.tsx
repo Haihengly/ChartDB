@@ -16,7 +16,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 interface DiagramResponse {
     id: string;
     name: string;
-    content: Partial<Diagram>;
+    content: Partial<Diagram> & { tablesCount?: number };
     createdAt: string | Date;
     updatedAt: string | Date;
 }
@@ -67,11 +67,6 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                             notes: diagram.notes || [],
                         },
                     };
-                    console.log(
-                        'DEBUG: Sending PUT request to',
-                        `${API_URL}/diagrams/${diagram.id}`,
-                        payload
-                    );
                     await apiFetch(`${API_URL}/diagrams/${diagram.id}`, {
                         method: 'PUT',
                         headers: {
@@ -89,19 +84,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const triggerSave = useCallback(
         (diagramId: string) => {
             const diagram = diagramsCache.current.get(diagramId);
-            console.log(
-                'DEBUG: triggerSave diagramId:',
-                diagramId,
-                'found?',
-                !!diagram
-            );
             if (diagram) {
                 diagram.updatedAt = new Date();
                 saveDiagramToBackend(diagram);
-            } else {
-                console.warn(
-                    'DEBUG: triggerSave - diagram NOT found in cache!'
-                );
             }
         },
         [saveDiagramToBackend]
@@ -639,13 +624,19 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 const data = (await response.json()) as DiagramResponse[];
                 return data.map((d) => {
                     const content = d.content || {};
+                    // Handle optimized metadata payload where tablesCount is returned instead of full tables array
+                    const tables =
+                        content.tables ||
+                        (content.tablesCount !== undefined
+                            ? new Array(content.tablesCount).fill({})
+                            : []);
                     const diagram: Diagram = {
                         id: d.id,
                         name: d.name,
                         databaseType:
                             content.databaseType || DatabaseType.GENERIC,
                         databaseEdition: content.databaseEdition,
-                        tables: content.tables || [],
+                        tables: tables,
                         relationships: content.relationships || [],
                         dependencies: content.dependencies || [],
                         areas: content.areas || [],

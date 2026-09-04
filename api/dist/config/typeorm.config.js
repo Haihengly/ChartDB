@@ -10,7 +10,9 @@ const getTypeOrmConfig = (configService) => ({
     database: configService.get('DB_NAME', 'chartdb'),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     autoLoadEntities: true,
-    synchronize: true,
+    synchronize: configService.get('DB_SYNCHRONIZE', false),
+    migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+    migrationsRun: true,
     logging: false,
 });
 exports.getTypeOrmConfig = getTypeOrmConfig;

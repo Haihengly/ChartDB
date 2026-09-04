@@ -10,6 +10,8 @@ export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOpt
   database: configService.get<string>('DB_NAME', 'chartdb'),
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   autoLoadEntities: true,
-  synchronize: true,
+  synchronize: configService.get<boolean>('DB_SYNCHRONIZE', false), // Set to false, controlled by env
+  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+  migrationsRun: true, // Auto-run migrations on startup
   logging: false,
 });

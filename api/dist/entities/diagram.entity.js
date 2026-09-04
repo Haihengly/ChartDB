@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiagramEntity = void 0;
 const typeorm_1 = require("typeorm");
+const user_entity_1 = require("./user.entity");
 let DiagramEntity = class DiagramEntity {
 };
 exports.DiagramEntity = DiagramEntity;
@@ -26,6 +27,15 @@ __decorate([
     (0, typeorm_1.Column)('jsonb'),
     __metadata("design:type", Object)
 ], DiagramEntity.prototype, "content", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'user_id', type: 'uuid', nullable: true }),
+    __metadata("design:type", Object)
+], DiagramEntity.prototype, "userId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.UserEntity, (user) => user.diagrams, { nullable: true, onDelete: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    __metadata("design:type", Object)
+], DiagramEntity.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

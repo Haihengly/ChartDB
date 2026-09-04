@@ -22,28 +22,57 @@ let DiagramsService = class DiagramsService {
     constructor(diagramsRepository) {
         this.diagramsRepository = diagramsRepository;
     }
-    async create(createDiagramDto) {
+    async create(createDiagramDto, userId) {
         const diagram = this.diagramsRepository.create({
             id: createDiagramDto.id || (0, uuid_1.v4)(),
             name: createDiagramDto.name,
             content: createDiagramDto.content,
+            userId: userId,
         });
         return this.diagramsRepository.save(diagram);
     }
-    async findAll() {
-        return this.diagramsRepository.find({
-            order: { updatedAt: 'DESC' },
-        });
+    async findAll(userId) {
+        const rawData = await this.diagramsRepository
+            .createQueryBuilder('diagram')
+            .select([
+            'diagram.id AS id',
+            'diagram.name AS name',
+            'diagram.createdAt AS "createdAt"',
+            'diagram.updatedAt AS "updatedAt"',
+            'diagram.userId AS "userId"'
+        ])
+            .addSelect("diagram.content->>'databaseType'", 'databaseType')
+            .addSelect("diagram.content->>'databaseEdition'", 'databaseEdition')
+            .addSelect("jsonb_array_length(CASE WHEN jsonb_typeof(diagram.content->'tables') = 'array' THEN diagram.content->'tables' ELSE '[]'::jsonb END)", 'tablesCount')
+            .where('diagram.userId = :userId', { userId })
+            .orWhere('diagram.userId IS NULL')
+            .orderBy('diagram.updatedAt', 'DESC')
+            .getRawMany();
+        return rawData.map((row) => ({
+            id: row.id,
+            name: row.name,
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
+            userId: row.userId,
+            content: {
+                databaseType: row.databaseType,
+                databaseEdition: row.databaseEdition,
+                tablesCount: parseInt(row.tablesCount || '0', 10),
+            },
+        }));
     }
-    async findOne(id) {
+    async findOne(id, userId) {
         const diagram = await this.diagramsRepository.findOne({ where: { id } });
         if (!diagram) {
             throw new common_1.NotFoundException(`Diagram with ID "${id}" not found`);
         }
+        if (diagram.userId !== userId && diagram.userId !== null) {
+            throw new common_1.UnauthorizedException('You do not have access to this diagram');
+        }
         return diagram;
     }
-    async update(id, updateDiagramDto) {
-        const diagram = await this.findOne(id);
+    async update(id, updateDiagramDto, userId) {
+        const diagram = await this.findOne(id, userId);
         if (updateDiagramDto.name !== undefined) {
             diagram.name = updateDiagramDto.name;
         }
@@ -52,8 +81,8 @@ let DiagramsService = class DiagramsService {
         }
         return this.diagramsRepository.save(diagram);
     }
-    async remove(id) {
-        const diagram = await this.findOne(id);
+    async remove(id, userId) {
+        const diagram = await this.findOne(id, userId);
         await this.diagramsRepository.remove(diagram);
     }
 };

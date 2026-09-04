@@ -22,13 +22,39 @@ export class DiagramsService {
     return this.diagramsRepository.save(diagram);
   }
 
-  async findAll(userId: string): Promise<DiagramEntity[]> {
-    return this.diagramsRepository
+  async findAll(userId: string): Promise<any[]> {
+    const rawData = await this.diagramsRepository
       .createQueryBuilder('diagram')
+      .select([
+        'diagram.id AS id',
+        'diagram.name AS name',
+        'diagram.createdAt AS "createdAt"',
+        'diagram.updatedAt AS "updatedAt"',
+        'diagram.userId AS "userId"'
+      ])
+      .addSelect("diagram.content->>'databaseType'", 'databaseType')
+      .addSelect("diagram.content->>'databaseEdition'", 'databaseEdition')
+      .addSelect(
+        "jsonb_array_length(CASE WHEN jsonb_typeof(diagram.content->'tables') = 'array' THEN diagram.content->'tables' ELSE '[]'::jsonb END)",
+        'tablesCount'
+      )
       .where('diagram.userId = :userId', { userId })
       .orWhere('diagram.userId IS NULL')
       .orderBy('diagram.updatedAt', 'DESC')
-      .getMany();
+      .getRawMany();
+
+    return rawData.map((row) => ({
+      id: row.id,
+      name: row.name,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      userId: row.userId,
+      content: {
+        databaseType: row.databaseType,
+        databaseEdition: row.databaseEdition,
+        tablesCount: parseInt(row.tablesCount || '0', 10),
+      },
+    }));
   }
 
   async findOne(id: string, userId: string): Promise<DiagramEntity> {
