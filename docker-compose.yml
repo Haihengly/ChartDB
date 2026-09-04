@@ -1,10 +1,8 @@
 services:
   postgres:
     image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: chartdb
-      POSTGRES_PASSWORD: chartdb
-      POSTGRES_DB: chartdb
+    env_file:
+      - env/postgres.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U chartdb"]
       interval: 5s
@@ -14,16 +12,13 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
   api:
     build:
       context: .
       dockerfile: Dockerfile.api
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: chartdb
-      DB_PASSWORD: chartdb
-      DB_NAME: chartdb
+    env_file:
+      - env/api.env
     ports:
       - "3000:3000"
     depends_on:
@@ -36,6 +31,8 @@ services:
       dockerfile: Dockerfile.ui
       args:
         VITE_API_URL: http://localhost:3000
+    env_file:
+      - env/ui.env
     ports:
       - "5173:5173"
     depends_on:
