@@ -16,7 +16,6 @@ build/
 **/.env.local
 env/*.env
 
-
 # But allow example/template files
 !**/*.env.example
 !.env.example
@@ -51,11 +50,8 @@ coverage/
 .temp/
 .tmp/
 
+# Project-specific excludes
 CLAUDE.md
 .claude/
-
-sql/.claude/
-CLAUDE.md
-.vscode/
 sql/
-plan.md
+plan.mddist/
