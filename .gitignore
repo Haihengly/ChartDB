@@ -56,3 +56,6 @@ CLAUDE.md
 
 sql/.claude/
 CLAUDE.md
+.vscode/
+sql/
+plan.md
