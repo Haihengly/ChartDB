@@ -8,163 +8,176 @@ import { AuthGuard } from './components/auth-guard/auth-guard';
 
 const routes: RouteObject[] = [
     {
-        path: 'login',
-        async lazy() {
-            const { LoginPage } = await import('./pages/login-page/login-page');
-            return {
-                element: <LoginPage />,
-            };
-        },
-    },
-    {
-        path: 'register',
-        async lazy() {
-            const { RegisterPage } =
-                await import('./pages/register-page/register-page');
-            return {
-                element: <RegisterPage />,
-            };
-        },
-    },
-    {
-        element: <AuthGuard />,
+        HydrateFallback: () => null,
         children: [
-            ...['', 'diagrams/:diagramId'].map((path) => ({
-                path,
-                async lazy() {
-                    const { EditorPage } =
-                        await import('./pages/editor-page/editor-page');
-
-                    return {
-                        element: <EditorPage />,
-                    };
-                },
-            })),
             {
-                path: 'examples',
+                path: 'login',
                 async lazy() {
-                    const { ExamplesPage } =
-                        await import('./pages/examples-page/examples-page');
+                    const { LoginPage } =
+                        await import('./pages/login-page/login-page');
                     return {
-                        element: <ExamplesPage />,
+                        element: <LoginPage />,
                     };
                 },
             },
             {
-                id: 'templates',
-                path: 'templates',
+                path: 'register',
                 async lazy() {
-                    const { TemplatesPage } =
-                        await import('./pages/templates-page/templates-page');
+                    const { RegisterPage } =
+                        await import('./pages/register-page/register-page');
                     return {
-                        element: <TemplatesPage />,
-                    };
-                },
-
-                loader: async (): Promise<TemplatesPageLoaderData> => {
-                    const { tags, templates } = await getTemplatesAndAllTags();
-
-                    return {
-                        allTags: tags,
-                        templates,
+                        element: <RegisterPage />,
                     };
                 },
             },
             {
-                id: 'templates_featured',
-                path: 'templates/featured',
-                async lazy() {
-                    const { TemplatesPage } =
-                        await import('./pages/templates-page/templates-page');
-                    return {
-                        element: <TemplatesPage />,
-                    };
-                },
-                loader: async (): Promise<TemplatesPageLoaderData> => {
-                    const { tags, templates } = await getTemplatesAndAllTags({
-                        featured: true,
-                    });
+                element: <AuthGuard />,
+                children: [
+                    ...['', 'diagrams/:diagramId'].map((path) => ({
+                        path,
+                        async lazy() {
+                            const { EditorPage } =
+                                await import('./pages/editor-page/editor-page');
 
-                    return {
-                        allTags: tags,
-                        templates,
-                    };
-                },
-            },
-            {
-                id: 'templates_tags',
-                path: 'templates/tags/:tag',
-                async lazy() {
-                    const { TemplatesPage } =
-                        await import('./pages/templates-page/templates-page');
-                    return {
-                        element: <TemplatesPage />,
-                    };
-                },
-                loader: async ({
-                    params,
-                }): Promise<TemplatesPageLoaderData> => {
-                    const { tags, templates } = await getTemplatesAndAllTags({
-                        tag: params.tag?.replace(/-/g, ' '),
-                    });
+                            return {
+                                element: <EditorPage />,
+                            };
+                        },
+                    })),
+                    {
+                        path: 'examples',
+                        async lazy() {
+                            const { ExamplesPage } =
+                                await import('./pages/examples-page/examples-page');
+                            return {
+                                element: <ExamplesPage />,
+                            };
+                        },
+                    },
+                    {
+                        id: 'templates',
+                        path: 'templates',
+                        async lazy() {
+                            const { TemplatesPage } =
+                                await import('./pages/templates-page/templates-page');
+                            return {
+                                element: <TemplatesPage />,
+                            };
+                        },
 
-                    return {
-                        allTags: tags,
-                        templates,
-                    };
-                },
+                        loader: async (): Promise<TemplatesPageLoaderData> => {
+                            const { tags, templates } =
+                                await getTemplatesAndAllTags();
+
+                            return {
+                                allTags: tags,
+                                templates,
+                            };
+                        },
+                    },
+                    {
+                        id: 'templates_featured',
+                        path: 'templates/featured',
+                        async lazy() {
+                            const { TemplatesPage } =
+                                await import('./pages/templates-page/templates-page');
+                            return {
+                                element: <TemplatesPage />,
+                            };
+                        },
+                        loader: async (): Promise<TemplatesPageLoaderData> => {
+                            const { tags, templates } =
+                                await getTemplatesAndAllTags({
+                                    featured: true,
+                                });
+
+                            return {
+                                allTags: tags,
+                                templates,
+                            };
+                        },
+                    },
+                    {
+                        id: 'templates_tags',
+                        path: 'templates/tags/:tag',
+                        async lazy() {
+                            const { TemplatesPage } =
+                                await import('./pages/templates-page/templates-page');
+                            return {
+                                element: <TemplatesPage />,
+                            };
+                        },
+                        loader: async ({
+                            params,
+                        }): Promise<TemplatesPageLoaderData> => {
+                            const { tags, templates } =
+                                await getTemplatesAndAllTags({
+                                    tag: params.tag?.replace(/-/g, ' '),
+                                });
+
+                            return {
+                                allTags: tags,
+                                templates,
+                            };
+                        },
+                    },
+                    {
+                        id: 'templates_templateSlug',
+                        path: 'templates/:templateSlug',
+                        async lazy() {
+                            const { TemplatePage } =
+                                await import('./pages/template-page/template-page');
+                            return {
+                                element: <TemplatePage />,
+                            };
+                        },
+                        loader: async ({
+                            params,
+                        }): Promise<TemplatePageLoaderData> => {
+                            const { templates } =
+                                await import('./templates-data/templates-data');
+                            return {
+                                template: templates.find(
+                                    (template) =>
+                                        template.slug === params.templateSlug
+                                ),
+                            };
+                        },
+                    },
+                    {
+                        id: 'templates_load',
+                        path: 'templates/clone/:templateSlug',
+                        async lazy() {
+                            const { CloneTemplatePage } =
+                                await import('./pages/clone-template-page/clone-template-page');
+                            return {
+                                element: <CloneTemplatePage />,
+                            };
+                        },
+                        loader: async ({ params }) => {
+                            const { templates } =
+                                await import('./templates-data/templates-data');
+                            return {
+                                template: templates.find(
+                                    (template) =>
+                                        template.slug === params.templateSlug
+                                ),
+                            };
+                        },
+                    },
+                ],
             },
             {
-                id: 'templates_templateSlug',
-                path: 'templates/:templateSlug',
+                path: '*',
                 async lazy() {
-                    const { TemplatePage } =
-                        await import('./pages/template-page/template-page');
+                    const { NotFoundPage } =
+                        await import('./pages/not-found-page/not-found-page');
                     return {
-                        element: <TemplatePage />,
-                    };
-                },
-                loader: async ({ params }): Promise<TemplatePageLoaderData> => {
-                    const { templates } =
-                        await import('./templates-data/templates-data');
-                    return {
-                        template: templates.find(
-                            (template) => template.slug === params.templateSlug
-                        ),
-                    };
-                },
-            },
-            {
-                id: 'templates_load',
-                path: 'templates/clone/:templateSlug',
-                async lazy() {
-                    const { CloneTemplatePage } =
-                        await import('./pages/clone-template-page/clone-template-page');
-                    return {
-                        element: <CloneTemplatePage />,
-                    };
-                },
-                loader: async ({ params }) => {
-                    const { templates } =
-                        await import('./templates-data/templates-data');
-                    return {
-                        template: templates.find(
-                            (template) => template.slug === params.templateSlug
-                        ),
+                        element: <NotFoundPage />,
                     };
                 },
             },
         ],
-    },
-    {
-        path: '*',
-        async lazy() {
-            const { NotFoundPage } =
-                await import('./pages/not-found-page/not-found-page');
-            return {
-                element: <NotFoundPage />,
-            };
-        },
     },
 ];
 
