@@ -18,6 +18,7 @@ import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { DBMLSection } from './dbml-section/dbml-section';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
+import { ProjectsSection } from './projects-section/projects-section';
 
 export interface SidePanelProps {}
 
@@ -64,6 +65,9 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
+                                <SelectItem value="projects">
+                                    {t('projects.title', 'Projects')}
+                                </SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -77,6 +81,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <RefsSection />
             ) : selectedSidebarSection === 'visuals' ? (
                 <VisualsSection />
+            ) : selectedSidebarSection === 'projects' ? (
+                <ProjectsSection />
             ) : (
                 <CustomTypesSection />
             )}

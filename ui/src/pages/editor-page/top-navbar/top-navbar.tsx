@@ -7,7 +7,6 @@ import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { UserNav } from './user-nav/user-nav';
 import { Menu } from './menu/menu';
-import { ProjectSwitcher } from '@/components/project-switcher/project-switcher';
 
 export interface TopNavbarProps {}
 
@@ -35,7 +34,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </a>
                 </div>
                 <div className="hidden h-4 w-px bg-border md:block" />
-                <ProjectSwitcher />
                 <Menu />
             </div>
             <DiagramName />

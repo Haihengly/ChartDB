@@ -26,6 +26,7 @@ export interface StorageContext {
     // Diagram operations
     addDiagram: (params: { diagram: Diagram }) => Promise<void>;
     listDiagrams: (options?: {
+        projectId?: string;
         includeTables?: boolean;
         includeRelationships?: boolean;
         includeDependencies?: boolean;

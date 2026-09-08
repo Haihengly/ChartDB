@@ -17,6 +17,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 interface DiagramResponse {
     id: string;
     name: string;
+    projectId?: string;
     content: Partial<Diagram> & { tablesCount?: number };
     createdAt: string | Date;
     updatedAt: string | Date;
@@ -618,11 +619,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         [activeProject?.id]
     );
 
-    const listDiagrams: StorageContext['listDiagrams'] =
-        useCallback(async (): Promise<Diagram[]> => {
+    const listDiagrams: StorageContext['listDiagrams'] = useCallback(
+        async (options): Promise<Diagram[]> => {
             try {
-                const url = activeProject?.id
-                    ? `${API_URL}/diagrams?projectId=${encodeURIComponent(activeProject.id)}`
+                const targetProjectId =
+                    options?.projectId !== undefined
+                        ? options.projectId
+                        : activeProject?.id;
+                const url = targetProjectId
+                    ? `${API_URL}/diagrams?projectId=${encodeURIComponent(targetProjectId)}`
                     : `${API_URL}/diagrams`;
                 const response = await apiFetch(url);
                 if (!response.ok) {
@@ -640,6 +645,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     const diagram: Diagram = {
                         id: d.id,
                         name: d.name,
+                        projectId: d.projectId,
                         databaseType:
                             content.databaseType || DatabaseType.GENERIC,
                         databaseEdition: content.databaseEdition,
@@ -659,7 +665,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 console.error('Failed to list diagrams from backend:', error);
                 return Array.from(diagramsCache.current.values());
             }
-        }, [activeProject?.id]);
+        },
+        [activeProject?.id]
+    );
 
     const getDiagram: StorageContext['getDiagram'] = useCallback(
         async (id: string): Promise<Diagram | undefined> => {
