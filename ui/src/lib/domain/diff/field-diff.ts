@@ -87,7 +87,9 @@ export const fieldDiffChangedSchema: z.ZodType<FieldDiffChanged> = z.object({
 });
 
 export type FieldDiff<T = DBField> =
-    FieldDiffAdded<T> | FieldDiffRemoved | FieldDiffChanged;
+    | FieldDiffAdded<T>
+    | FieldDiffRemoved
+    | FieldDiffChanged;
 
 export const createFieldDiffSchema = <T = DBField>(
     fieldSchema: z.ZodType<T>

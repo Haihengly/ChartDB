@@ -64,7 +64,9 @@ export const createAreaDiffAddedSchema = <T = Area>(
 };
 
 export type AreaDiff<T = Area> =
-    AreaDiffChanged | AreaDiffRemoved | AreaDiffAdded<T>;
+    | AreaDiffChanged
+    | AreaDiffRemoved
+    | AreaDiffAdded<T>;
 
 export const createAreaDiffSchema = <T = Area>(
     areaSchema: z.ZodType<T>
