@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Query, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { DiagramsService } from './diagrams.service';
 import { CreateDiagramDto, UpdateDiagramDto } from '../../dto/diagram.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -16,8 +16,8 @@ export class DiagramsController {
   }
 
   @Get()
-  async findAll(@CurrentUser() user: UserEntity) {
-    return this.diagramsService.findAll(user.id);
+  async findAll(@CurrentUser() user: UserEntity, @Query('projectId') projectId?: string) {
+    return this.diagramsService.findAll(user.id, projectId);
   }
 
   @Get(':id')

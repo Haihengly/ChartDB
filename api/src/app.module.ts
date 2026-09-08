@@ -5,6 +5,7 @@ import { envConfig } from './config/env.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { DiagramsModule } from './modules/diagrams/diagrams.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProjectsModule } from './modules/projects/projects.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     DiagramsModule,
     AuthModule,
+    ProjectsModule,
   ],
 })
 export class AppModule {}

@@ -10,6 +10,7 @@ import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { debounce } from '@/lib/utils';
 import { apiFetch } from '../../lib/api-fetch';
+import { useProject } from '@/hooks/use-project';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -24,6 +25,8 @@ interface DiagramResponse {
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
+    const { activeProject } = useProject();
+
     // In-memory cache for diagrams to ensure rapid updates and state reconstruction
     const diagramsCache = useRef<Map<string, Diagram>>(new Map());
     const configCache = useRef<ChartDBConfig>({ defaultDiagramId: '' });
@@ -589,6 +592,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 const payload = {
                     id: diagram.id,
                     name: diagram.name,
+                    projectId: activeProject?.id,
                     content: {
                         databaseType: diagram.databaseType,
                         databaseEdition: diagram.databaseEdition,
@@ -611,13 +615,16 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 console.error('Failed to create diagram on backend:', error);
             }
         },
-        []
+        [activeProject?.id]
     );
 
     const listDiagrams: StorageContext['listDiagrams'] =
         useCallback(async (): Promise<Diagram[]> => {
             try {
-                const response = await apiFetch(`${API_URL}/diagrams`);
+                const url = activeProject?.id
+                    ? `${API_URL}/diagrams?projectId=${encodeURIComponent(activeProject.id)}`
+                    : `${API_URL}/diagrams`;
+                const response = await apiFetch(url);
                 if (!response.ok) {
                     throw new Error('Failed to fetch diagrams');
                 }
@@ -652,7 +659,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 console.error('Failed to list diagrams from backend:', error);
                 return Array.from(diagramsCache.current.values());
             }
-        }, []);
+        }, [activeProject?.id]);
 
     const getDiagram: StorageContext['getDiagram'] = useCallback(
         async (id: string): Promise<Diagram | undefined> => {

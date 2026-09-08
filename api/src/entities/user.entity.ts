@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
-import { DiagramEntity } from './diagram.entity';
+import { ProjectMemberEntity } from './project-member.entity';
+import { ProjectEntity } from './project.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -15,6 +16,9 @@ export class UserEntity {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @OneToMany(() => DiagramEntity, (diagram) => diagram.user)
-  diagrams: DiagramEntity[];
+  @OneToMany(() => ProjectMemberEntity, (member) => member.user)
+  memberships: ProjectMemberEntity[];
+
+  @OneToMany(() => ProjectEntity, (project) => project.createdBy)
+  createdProjects: ProjectEntity[];
 }

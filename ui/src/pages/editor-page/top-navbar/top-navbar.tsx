@@ -7,6 +7,7 @@ import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { UserNav } from './user-nav/user-nav';
 import { Menu } from './menu/menu';
+import { ProjectSwitcher } from '@/components/project-switcher/project-switcher';
 
 export interface TopNavbarProps {}
 
@@ -15,7 +16,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     return (
         <nav className="flex flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
-            <div className="flex flex-1 flex-col justify-between gap-x-1 md:flex-row md:justify-normal">
+            <div className="flex flex-1 flex-col justify-between gap-x-2 md:flex-row md:justify-normal md:items-center">
                 <div className="flex items-center justify-between pt-[8px] font-primary md:py-[10px]">
                     <a
                         href="https://chartdb.io"
@@ -33,6 +34,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         />
                     </a>
                 </div>
+                <div className="hidden h-4 w-px bg-border md:block" />
+                <ProjectSwitcher />
                 <Menu />
             </div>
             <DiagramName />

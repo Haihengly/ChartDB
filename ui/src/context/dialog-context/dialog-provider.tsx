@@ -20,6 +20,8 @@ import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/expor
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import { CreateProjectDialog } from '@/dialogs/create-project-dialog/create-project-dialog';
+import { ProjectMembersDialog } from '@/dialogs/project-members-dialog/project-members-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -134,6 +136,14 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
 
+    // Create project dialog
+    const [openCreateProjectDialog, setOpenCreateProjectDialog] =
+        useState(false);
+
+    // Project members dialog
+    const [openProjectMembersDialog, setOpenProjectMembersDialog] =
+        useState(false);
+
     return (
         <dialogContext.Provider
             value={{
@@ -155,6 +165,13 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
+                openCreateProjectDialog: () => setOpenCreateProjectDialog(true),
+                closeCreateProjectDialog: () =>
+                    setOpenCreateProjectDialog(false),
+                openProjectMembersDialog: () =>
+                    setOpenProjectMembersDialog(true),
+                closeProjectMembersDialog: () =>
+                    setOpenProjectMembersDialog(false),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -197,6 +214,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
+            <CreateProjectDialog dialog={{ open: openCreateProjectDialog }} />
+            <ProjectMembersDialog dialog={{ open: openProjectMembersDialog }} />
         </dialogContext.Provider>
     );
 };

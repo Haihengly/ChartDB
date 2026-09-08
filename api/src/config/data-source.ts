@@ -2,6 +2,8 @@ import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { UserEntity } from '../entities/user.entity';
 import { DiagramEntity } from '../entities/diagram.entity';
+import { ProjectEntity } from '../entities/project.entity';
+import { ProjectMemberEntity } from '../entities/project-member.entity';
 
 config();
 
@@ -12,7 +14,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'chartdb',
   password: process.env.DB_PASSWORD || 'chartdb',
   database: process.env.DB_NAME || 'chartdb',
-  entities: [UserEntity, DiagramEntity],
+  entities: [UserEntity, DiagramEntity, ProjectEntity, ProjectMemberEntity],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   synchronize: false,
 });

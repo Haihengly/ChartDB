@@ -10,6 +10,10 @@ export class CreateDiagramDto {
 
   @IsObject()
   content: Record<string, unknown>;
+
+  @IsString()
+  @IsOptional()
+  projectId?: string;
 }
 
 export class UpdateDiagramDto {

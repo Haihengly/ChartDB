@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '../../entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ProjectsService } from '../projects/projects.service';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
+    private readonly projectsService: ProjectsService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -45,6 +47,9 @@ export class AuthService {
     });
 
     const savedUser = await this.usersRepository.save(user);
+
+    // Auto-create default "Personal" project
+    await this.projectsService.create('Personal', savedUser.id);
 
     const payload = { sub: savedUser.id, email: savedUser.email };
     return {

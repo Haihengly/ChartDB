@@ -1,7 +1,9 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { DiagramEntity } from '../../entities/diagram.entity';
+import { ProjectEntity } from '../../entities/project.entity';
+import { ProjectMemberEntity } from '../../entities/project-member.entity';
 import { CreateDiagramDto, UpdateDiagramDto } from '../../dto/diagram.dto';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,19 +12,79 @@ export class DiagramsService {
   constructor(
     @InjectRepository(DiagramEntity)
     private diagramsRepository: Repository<DiagramEntity>,
+    @InjectRepository(ProjectEntity)
+    private projectsRepository: Repository<ProjectEntity>,
+    @InjectRepository(ProjectMemberEntity)
+    private projectMembersRepository: Repository<ProjectMemberEntity>,
   ) {}
 
+  private async getPersonalProjectId(userId: string): Promise<string> {
+    const personalProject = await this.projectsRepository
+      .createQueryBuilder('p')
+      .innerJoin('p.members', 'm')
+      .where('m.userId = :userId', { userId })
+      .andWhere('p.name = :name', { name: 'Personal' })
+      .getOne();
+
+    if (personalProject) {
+      return personalProject.id;
+    }
+
+    const anyMembership = await this.projectMembersRepository.findOne({
+      where: { userId },
+    });
+
+    if (anyMembership) {
+      return anyMembership.projectId;
+    }
+
+    throw new NotFoundException('No accessible project found for user');
+  }
+
+  private async checkProjectAccess(projectId: string, userId: string): Promise<ProjectMemberEntity> {
+    const member = await this.projectMembersRepository.findOne({
+      where: { projectId, userId },
+    });
+    if (!member) {
+      throw new ForbiddenException('You do not have access to this project');
+    }
+    return member;
+  }
+
   async create(createDiagramDto: CreateDiagramDto, userId: string): Promise<DiagramEntity> {
+    let projectId = createDiagramDto.projectId;
+    if (!projectId) {
+      projectId = await this.getPersonalProjectId(userId);
+    } else {
+      await this.checkProjectAccess(projectId, userId);
+    }
+
     const diagram = this.diagramsRepository.create({
       id: createDiagramDto.id || uuidv4(),
       name: createDiagramDto.name,
       content: createDiagramDto.content,
-      userId: userId,
+      projectId: projectId,
+      createdById: userId,
     });
     return this.diagramsRepository.save(diagram);
   }
 
-  async findAll(userId: string): Promise<any[]> {
+  async findAll(userId: string, projectId?: string): Promise<any[]> {
+    let projectIds: string[] = [];
+
+    if (projectId) {
+      await this.checkProjectAccess(projectId, userId);
+      projectIds = [projectId];
+    } else {
+      const memberships = await this.projectMembersRepository.find({
+        where: { userId },
+      });
+      projectIds = memberships.map((m) => m.projectId);
+      if (projectIds.length === 0) {
+        return [];
+      }
+    }
+
     const rawData = await this.diagramsRepository
       .createQueryBuilder('diagram')
       .select([
@@ -30,16 +92,16 @@ export class DiagramsService {
         'diagram.name AS name',
         'diagram.createdAt AS "createdAt"',
         'diagram.updatedAt AS "updatedAt"',
-        'diagram.userId AS "userId"'
+        'diagram.projectId AS "projectId"',
+        'diagram.createdById AS "createdById"',
       ])
       .addSelect("diagram.content->>'databaseType'", 'databaseType')
       .addSelect("diagram.content->>'databaseEdition'", 'databaseEdition')
       .addSelect(
         "jsonb_array_length(CASE WHEN jsonb_typeof(diagram.content->'tables') = 'array' THEN diagram.content->'tables' ELSE '[]'::jsonb END)",
-        'tablesCount'
+        'tablesCount',
       )
-      .where('diagram.userId = :userId', { userId })
-      .orWhere('diagram.userId IS NULL')
+      .where('diagram.projectId IN (:...projectIds)', { projectIds })
       .orderBy('diagram.updatedAt', 'DESC')
       .getRawMany();
 
@@ -48,7 +110,8 @@ export class DiagramsService {
       name: row.name,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-      userId: row.userId,
+      projectId: row.projectId,
+      createdById: row.createdById,
       content: {
         databaseType: row.databaseType,
         databaseEdition: row.databaseEdition,
@@ -62,9 +125,11 @@ export class DiagramsService {
     if (!diagram) {
       throw new NotFoundException(`Diagram with ID "${id}" not found`);
     }
-    if (diagram.userId !== userId && diagram.userId !== null) {
-      throw new UnauthorizedException('You do not have access to this diagram');
+
+    if (diagram.projectId) {
+      await this.checkProjectAccess(diagram.projectId, userId);
     }
+
     return diagram;
   }
 
