@@ -86,6 +86,57 @@ export const ProjectProvider: React.FC<React.PropsWithChildren> = ({
         [refreshProjects]
     );
 
+    const renameProject = useCallback(
+        async (id: string, name: string) => {
+            const res = await apiFetch(`${API_URL}/projects/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name }),
+            });
+            if (!res.ok) {
+                const data = await res.json().catch(() => null);
+                throw new Error(data?.message || 'Failed to rename project');
+            }
+            const updatedProject = await res.json();
+            await refreshProjects();
+            return updatedProject;
+        },
+        [refreshProjects]
+    );
+
+    const deleteProject = useCallback(
+        async (id: string) => {
+            const res = await apiFetch(`${API_URL}/projects/${id}`, {
+                method: 'DELETE',
+            });
+            if (!res.ok) {
+                const data = await res.json().catch(() => null);
+                throw new Error(data?.message || 'Failed to delete project');
+            }
+
+            setProjects((prev) => {
+                const newProjects = prev.filter((p) => p.id !== id);
+                if (activeProject?.id === id) {
+                    // Update active project if we deleted it
+                    const defaultProj =
+                        newProjects.find((p) => p.name === 'Personal') ||
+                        newProjects[0];
+                    setActiveProjectState(defaultProj);
+                    if (defaultProj) {
+                        localStorage.setItem(
+                            'chartdb_active_project',
+                            defaultProj.id
+                        );
+                    } else {
+                        localStorage.removeItem('chartdb_active_project');
+                    }
+                }
+                return newProjects;
+            });
+        },
+        [activeProject]
+    );
+
     const listMembers = useCallback(async (projectId: string) => {
         const res = await apiFetch(`${API_URL}/projects/${projectId}/members`);
         if (!res.ok) {
@@ -155,6 +206,8 @@ export const ProjectProvider: React.FC<React.PropsWithChildren> = ({
             setActiveProject,
             refreshProjects,
             createProject,
+            renameProject,
+            deleteProject,
             listMembers,
             addMember,
             updateMemberRole,
@@ -166,6 +219,8 @@ export const ProjectProvider: React.FC<React.PropsWithChildren> = ({
             setActiveProject,
             refreshProjects,
             createProject,
+            renameProject,
+            deleteProject,
             listMembers,
             addMember,
             updateMemberRole,

@@ -28,6 +28,12 @@ class UpdateMemberDto {
   role: ProjectRole;
 }
 
+class UpdateProjectDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
 @Controller('projects')
 @UseGuards(JwtAuthGuard)
 export class ProjectsController {
@@ -52,6 +58,23 @@ export class ProjectsController {
   @Get(':id/members')
   async findMembers(@Param('id') id: string, @CurrentUser() user: UserEntity) {
     return this.projectsService.findMembers(id, user.id);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto, @CurrentUser() user: UserEntity) {
+    const project = await this.projectsService.update(id, updateProjectDto.name, user.id);
+    return {
+      id: project.id,
+      name: project.name,
+      createdById: project.createdById,
+      createdAt: project.createdAt,
+    };
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string, @CurrentUser() user: UserEntity) {
+    return this.projectsService.remove(id, user.id);
   }
 
   @Post(':id/members')

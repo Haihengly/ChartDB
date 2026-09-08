@@ -1,0 +1,1 @@
+- [Verify linting before completion](verify-linting-before-completion.md) — Ensure linting passes before declaring tasks complete

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { DiagramEntity } from '../../entities/diagram.entity';
 import { ProjectEntity } from '../../entities/project.entity';
-import { ProjectMemberEntity } from '../../entities/project-member.entity';
+import { ProjectMemberEntity, ProjectRole } from '../../entities/project-member.entity';
 import { CreateDiagramDto, UpdateDiagramDto } from '../../dto/diagram.dto';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,7 +38,16 @@ export class DiagramsService {
       return anyMembership.projectId;
     }
 
-    throw new NotFoundException('No accessible project found for user');
+    // Auto-create a default project if the user has no projects
+    const newProj = this.projectsRepository.create({ name: 'Personal', createdById: userId });
+    const savedProj = await this.projectsRepository.save(newProj);
+    const member = this.projectMembersRepository.create({
+      projectId: savedProj.id,
+      userId: userId,
+      role: ProjectRole.OWNER,
+    });
+    await this.projectMembersRepository.save(member);
+    return savedProj.id;
   }
 
   private async checkProjectAccess(projectId: string, userId: string): Promise<ProjectMemberEntity> {

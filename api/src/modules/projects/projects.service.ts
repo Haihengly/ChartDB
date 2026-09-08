@@ -41,7 +41,23 @@ export class ProjectsService {
         'member.role AS role',
         'member.joined_at AS "joinedAt"',
       ])
+      .orderBy('project.created_at', 'ASC')
       .getRawMany();
+  }
+
+  async update(id: string, name: string, currentUserId: string): Promise<ProjectEntity> {
+    await this.ensureOwner(id, currentUserId);
+    const project = await this.projectsRepository.findOne({ where: { id } });
+    if (!project) throw new NotFoundException('Project not found.');
+    project.name = name;
+    return this.projectsRepository.save(project);
+  }
+
+  async remove(id: string, currentUserId: string): Promise<void> {
+    await this.ensureOwner(id, currentUserId);
+    const project = await this.projectsRepository.findOne({ where: { id } });
+    if (!project) throw new NotFoundException('Project not found.');
+    await this.projectsRepository.remove(project);
   }
 
   async findMembers(projectId: string, currentUserId: string): Promise<any[]> {

@@ -363,6 +363,7 @@ export const en = {
             diagram_actions: {
                 open: 'Open',
                 duplicate: 'Duplicate',
+                rename: 'Rename',
                 delete: 'Delete',
             },
         },

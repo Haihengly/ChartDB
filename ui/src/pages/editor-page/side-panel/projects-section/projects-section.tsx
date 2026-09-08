@@ -15,6 +15,8 @@ import { Button } from '@/components/button/button';
 import { Badge } from '@/components/badge/badge';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Diagram } from '@/lib/domain/diagram';
+import { ProjectRowActionsMenu } from './project-row-actions-menu';
+import { DiagramRowActionsMenu } from '@/dialogs/open-diagram-dialog/diagram-row-actions-menu/diagram-row-actions-menu';
 
 export const ProjectsSection: React.FC = () => {
     const { t } = useTranslation();
@@ -33,6 +35,12 @@ export const ProjectsSection: React.FC = () => {
     const [expandedProjects, setExpandedProjects] = useState<
         Record<string, boolean>
     >({});
+
+    const refetch = async () => {
+        // Simple re-fetch all for simplicity for now
+        // A more optimal approach would be to refetch only specific project
+        window.location.reload();
+    };
 
     useEffect(() => {
         projects.forEach(async (project) => {
@@ -103,84 +111,115 @@ export const ProjectsSection: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto p-2">
-                {projects.map((project) => (
-                    <div key={project.id} className="mb-1">
-                        <div
-                            className={`flex cursor-pointer items-center justify-between rounded-md p-1.5 hover:bg-secondary ${
-                                projectDiagrams[project.id]?.some(
-                                    (d) => d.id === diagramId
-                                )
-                                    ? 'bg-secondary/50 font-medium'
-                                    : ''
-                            }`}
-                            onClick={() => toggleProject(project.id)}
-                        >
-                            <div className="flex flex-1 items-center overflow-hidden text-sm">
-                                {expandedProjects[project.id] ? (
-                                    <ChevronDown className="mr-1 size-4 shrink-0 text-muted-foreground" />
-                                ) : (
-                                    <ChevronRight className="mr-1 size-4 shrink-0 text-muted-foreground" />
-                                )}
-                                <Folder className="mr-2 size-4 shrink-0 text-muted-foreground" />
-                                <span className="truncate">{project.name}</span>
-                            </div>
-                            <Badge
-                                variant="secondary"
-                                className="ml-2 flex shrink-0 cursor-pointer items-center gap-1 rounded-full px-2 py-0.5 text-xs font-normal hover:bg-primary/20"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActiveProject(project);
-                                    openProjectMembersDialog();
-                                }}
-                            >
-                                <Users className="size-3" />
-                                {memberCounts[project.id] ?? '-'}
-                            </Badge>
-                        </div>
-
-                        {expandedProjects[project.id] && (
-                            <div className="ml-[1.125rem] mt-1 border-l pl-2">
-                                {projectDiagrams[project.id]?.length === 0 ? (
-                                    <div className="p-1.5 text-xs text-muted-foreground">
-                                        {t(
-                                            'projects.no_operations',
-                                            'No diagrams'
-                                        )}
-                                    </div>
-                                ) : (
-                                    projectDiagrams[project.id]?.map(
-                                        (diagram) => (
-                                            <div
-                                                key={diagram.id}
-                                                className={`group mb-0.5 flex cursor-pointer items-center rounded-md p-1.5 text-sm ${
-                                                    diagram.id === diagramId
-                                                        ? 'bg-primary/10 font-medium text-primary'
-                                                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                                                }`}
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/diagrams/${diagram.id}`
-                                                    )
-                                                }
-                                            >
-                                                <LayoutTemplate
-                                                    className={`mr-2 size-3.5 shrink-0 ${
-                                                        diagram.id === diagramId
-                                                            ? 'text-primary'
-                                                            : 'text-muted-foreground group-hover:text-foreground'
-                                                    }`}
-                                                />
-                                                <span className="flex-1 truncate">
-                                                    {diagram.name}
-                                                </span>
-                                            </div>
-                                        )
-                                    )
-                                )}
-                            </div>
+                {projects.length === 0 ? (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                        {t(
+                            'projects.no_projects',
+                            'You have no projects yet — create one to get started'
                         )}
                     </div>
-                ))}
+                ) : (
+                    projects.map((project) => (
+                        <div key={project.id} className="mb-1">
+                            <div
+                                className={`flex cursor-pointer items-center justify-between rounded-md p-1.5 hover:bg-secondary ${
+                                    projectDiagrams[project.id]?.some(
+                                        (d) => d.id === diagramId
+                                    )
+                                        ? 'bg-secondary/50 font-medium'
+                                        : ''
+                                }`}
+                                onClick={() => toggleProject(project.id)}
+                            >
+                                <div className="flex flex-1 items-center overflow-hidden text-sm">
+                                    {expandedProjects[project.id] ? (
+                                        <ChevronDown className="mr-1 size-4 shrink-0 text-muted-foreground" />
+                                    ) : (
+                                        <ChevronRight className="mr-1 size-4 shrink-0 text-muted-foreground" />
+                                    )}
+                                    <Folder className="mr-2 size-4 shrink-0 text-muted-foreground" />
+                                    <span className="truncate">
+                                        {project.name}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Badge
+                                        variant="secondary"
+                                        className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full px-2 py-0.5 text-xs font-normal hover:bg-primary/20"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveProject(project);
+                                            openProjectMembersDialog();
+                                        }}
+                                    >
+                                        <Users className="size-3" />
+                                        {memberCounts[project.id] ?? '-'}
+                                    </Badge>
+                                    <ProjectRowActionsMenu project={project} />
+                                </div>
+                            </div>
+
+                            {expandedProjects[project.id] && (
+                                <div className="ml-[1.125rem] mt-1 border-l pl-2">
+                                    {projectDiagrams[project.id]?.length ===
+                                    0 ? (
+                                        <div className="p-1.5 text-xs text-muted-foreground">
+                                            {t(
+                                                'projects.no_operations',
+                                                'No diagrams'
+                                            )}
+                                        </div>
+                                    ) : (
+                                        projectDiagrams[project.id]?.map(
+                                            (diagram) => (
+                                                <div
+                                                    key={diagram.id}
+                                                    className={`group mb-0.5 flex cursor-pointer items-center rounded-md p-1.5 text-sm ${
+                                                        diagram.id === diagramId
+                                                            ? 'bg-primary/10 font-medium text-primary'
+                                                            : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                                                    }`}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/diagrams/${diagram.id}`
+                                                        )
+                                                    }
+                                                >
+                                                    <LayoutTemplate
+                                                        className={`mr-2 size-3.5 shrink-0 ${
+                                                            diagram.id ===
+                                                            diagramId
+                                                                ? 'text-primary'
+                                                                : 'text-muted-foreground group-hover:text-foreground'
+                                                        }`}
+                                                    />
+                                                    <span className="flex-1 truncate">
+                                                        {diagram.name}
+                                                    </span>
+                                                    <DiagramRowActionsMenu
+                                                        diagram={diagram}
+                                                        onOpen={() =>
+                                                            navigate(
+                                                                `/diagrams/${diagram.id}`
+                                                            )
+                                                        }
+                                                        refetch={refetch}
+                                                        numberOfDiagrams={
+                                                            projectDiagrams[
+                                                                project.id
+                                                            ]?.length || 0
+                                                        }
+                                                        triggerClassName="opacity-0 group-hover:opacity-100"
+                                                    />
+                                                </div>
+                                            )
+                                        )
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

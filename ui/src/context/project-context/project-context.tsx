@@ -15,6 +15,8 @@ export interface ProjectContext {
     setActiveProject: (project: Project | undefined) => void;
     refreshProjects: () => Promise<void>;
     createProject: (name: string) => Promise<Project>;
+    renameProject: (id: string, name: string) => Promise<Project>;
+    deleteProject: (id: string) => Promise<void>;
     listMembers: (projectId: string) => Promise<ProjectMember[]>;
     addMember: (
         projectId: string,
@@ -35,6 +37,8 @@ export const projectInitialValue: ProjectContext = {
     setActiveProject: emptyFn,
     refreshProjects: async () => {},
     createProject: async () => ({}) as Project,
+    renameProject: async () => ({}) as Project,
+    deleteProject: async () => {},
     listMembers: async () => [],
     addMember: async () => ({}) as ProjectMember,
     updateMemberRole: async () => ({}) as ProjectMember,

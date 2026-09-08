@@ -375,6 +375,7 @@ export const de: LanguageTranslation = {
             diagram_actions: {
                 open: 'Öffnen',
                 duplicate: 'Duplizieren',
+                rename: 'Umbenennen',
                 delete: 'Löschen',
             },
         },
