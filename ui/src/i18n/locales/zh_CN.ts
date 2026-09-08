@@ -348,9 +348,11 @@ export const zh_CN: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: '打开数据库',
             description: '从下面的列表中选择一个图表打开。',
             table_columns: {
+                project: 'Project',
                 name: '名称',
                 created_at: '创建于',
                 last_modified: '最后修改于',

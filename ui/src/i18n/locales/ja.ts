@@ -358,9 +358,11 @@ export const ja: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'データベースを開く',
             description: '以下のリストからダイアグラムを選択してください。',
             table_columns: {
+                project: 'Project',
                 name: '名前',
                 created_at: '作成日',
                 last_modified: '最終更新日',

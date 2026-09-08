@@ -354,9 +354,11 @@ export const ko_KR: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: '데이터베이스 열기',
             description: '아래의 목록에서 다이어그램을 선택하세요.',
             table_columns: {
+                project: 'Project',
                 name: '이름',
                 created_at: '생성일시',
                 last_modified: '최근 수정일시',

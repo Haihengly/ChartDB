@@ -357,9 +357,11 @@ export const bn: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'ডেটাবেস খুলুন',
             description: 'নিচের তালিকা থেকে একটি চিত্র নির্বাচন করুন।',
             table_columns: {
+                project: 'Project',
                 name: 'নাম',
                 created_at: 'তৈরির তারিখ',
                 last_modified: 'সর্বশেষ পরিবর্তিত',

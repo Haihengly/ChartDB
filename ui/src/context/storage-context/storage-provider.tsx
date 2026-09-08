@@ -622,10 +622,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const listDiagrams: StorageContext['listDiagrams'] = useCallback(
         async (options): Promise<Diagram[]> => {
             try {
-                const targetProjectId =
-                    options?.projectId !== undefined
-                        ? options.projectId
-                        : activeProject?.id;
+                const targetProjectId = options?.fetchAll
+                    ? undefined
+                    : options?.projectId !== undefined
+                      ? options.projectId
+                      : activeProject?.id;
                 const url = targetProjectId
                     ? `${API_URL}/diagrams?projectId=${encodeURIComponent(targetProjectId)}`
                     : `${API_URL}/diagrams`;

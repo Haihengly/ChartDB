@@ -354,9 +354,11 @@ export const gu: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'ડેટાબેસ ખોલો',
             description: 'નીચેની યાદીમાંથી એક ડાયાગ્રામ પસંદ કરો.',
             table_columns: {
+                project: 'Project',
                 name: 'નામ',
                 created_at: 'બનાવાની તારીખ',
                 last_modified: 'છેલ્લું સુધારેલું',

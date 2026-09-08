@@ -356,10 +356,12 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Abrir Base de Datos',
             description:
                 'Selecciona un diagrama para abrir de la lista a continuación.',
             table_columns: {
+                project: 'Project',
                 name: 'Nombre',
                 created_at: 'Creado en',
                 last_modified: 'Última modificación',

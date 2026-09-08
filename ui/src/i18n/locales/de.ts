@@ -358,9 +358,11 @@ export const de: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Datenbank öffnen',
             description: 'Wählen Sie ein Diagramm aus der Liste unten aus.',
             table_columns: {
+                project: 'Project',
                 name: 'Name',
                 created_at: 'Erstellt am',
                 last_modified: 'Zuletzt geändert',

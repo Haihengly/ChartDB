@@ -357,9 +357,11 @@ export const pt_BR: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Abrir Banco de Dados',
             description: 'Selecione um diagrama para abrir da lista abaixo.',
             table_columns: {
+                project: 'Project',
                 name: 'Nome',
                 created_at: 'Criado em',
                 last_modified: 'Última Modificação',

@@ -350,9 +350,11 @@ export const hr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Otvori bazu podataka',
             description: 'Odaberite dijagram za otvaranje iz popisa ispod.',
             table_columns: {
+                project: 'Project',
                 name: 'Naziv',
                 created_at: 'Stvoreno',
                 last_modified: 'Zadnje izmijenjeno',

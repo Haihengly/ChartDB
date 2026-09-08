@@ -353,10 +353,12 @@ export const ru: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Открыть базу данных',
             description:
                 'Выберите диаграмму, которую нужно открыть, из списка ниже.',
             table_columns: {
+                project: 'Project',
                 name: 'Имя',
                 created_at: 'Создано в',
                 last_modified: 'Последнее изменение',

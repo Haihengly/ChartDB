@@ -361,9 +361,11 @@ export const mr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'डेटाबेस उघडा',
             description: 'खालील यादीतून उघडण्यासाठी एक आरेख निवडा.',
             table_columns: {
+                project: 'Project',
                 name: 'नाव',
                 created_at: 'तयार केले',
                 last_modified: 'शेवटचे बदलले',

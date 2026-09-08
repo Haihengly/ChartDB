@@ -358,9 +358,11 @@ export const hi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'डेटाबेस खोलें',
             description: 'नीचे दी गई सूची से एक आरेख चुनें।',
             table_columns: {
+                project: 'Project',
                 name: 'नाम',
                 created_at: 'निर्माण तिथि',
                 last_modified: 'अंतिम संशोधन',

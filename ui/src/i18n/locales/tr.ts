@@ -350,9 +350,11 @@ export const tr: LanguageTranslation = {
             import: 'İçe Aktar',
         },
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Veritabanı Aç',
             description: 'Aşağıdaki listeden açmak için bir diyagram seçin.',
             table_columns: {
+                project: 'Project',
                 name: 'Ad',
                 created_at: 'Oluşturulma Tarihi',
                 last_modified: 'Son Değiştirme',

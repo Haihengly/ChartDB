@@ -356,10 +356,12 @@ export const ne: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'डाटाबेस खोल्नुहोस्',
             description:
                 'तलको सूचीबाट खोल्नका लागि एक डायाग्राम चयन गर्नुहोस्।',
             table_columns: {
+                project: 'Project',
                 name: 'नाम',
                 created_at: 'मा सिर्जना',
                 last_modified: 'अन्तिम परिवर्तन',

@@ -1,3 +1,4 @@
+import { Badge } from '@/components/badge/badge';
 import { Button } from '@/components/button/button';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import {
@@ -20,9 +21,10 @@ import {
 } from '@/components/table/table';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
+import { useProject } from '@/hooks/use-project';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { BaseDialogProps } from '../common/base-dialog-props';
@@ -38,7 +40,14 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     canClose = true,
 }) => {
     const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
+    const { projects, setActiveProject } = useProject();
     const { t } = useTranslation();
+
+    const projectMap = useMemo(
+        () => new Map(projects.map((p) => [p.id, p])),
+        [projects]
+    );
+
     const { updateConfig } = useConfig();
     const navigate = useNavigate();
     const { listDiagrams } = useStorage();
@@ -48,7 +57,10 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     >();
 
     const fetchDiagrams = useCallback(async () => {
-        const diagrams = await listDiagrams({ includeTables: true });
+        const diagrams = await listDiagrams({
+            fetchAll: true,
+            includeTables: true,
+        });
         setDiagrams(
             diagrams.sort(
                 (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
@@ -67,11 +79,28 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const openDiagram = useCallback(
         (diagramId: string) => {
             if (diagramId) {
+                const targetDiagram = diagrams.find((d) => d.id === diagramId);
+                if (targetDiagram?.projectId) {
+                    const targetProject = projects.find(
+                        (p) => p.id === targetDiagram.projectId
+                    );
+                    if (targetProject) {
+                        setActiveProject(targetProject);
+                    }
+                }
                 updateConfig({ config: { defaultDiagramId: diagramId } });
                 navigate(`/diagrams/${diagramId}`);
+                closeOpenDiagramDialog();
             }
         },
-        [updateConfig, navigate]
+        [
+            diagrams,
+            projects,
+            setActiveProject,
+            updateConfig,
+            navigate,
+            closeOpenDiagramDialog,
+        ]
     );
 
     const handleRowKeyDown = useCallback(
@@ -135,8 +164,10 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             <DialogContent
                 className="flex h-[30rem] max-h-screen flex-col overflow-y-auto md:min-w-[80vw] xl:min-w-[55vw]"
                 showClose={canClose}
+                showBack={canClose}
+                onBackClick={closeOpenDiagramDialog}
             >
-                <DialogHeader>
+                <DialogHeader className="pl-6">
                     <DialogTitle>{t('open_diagram_dialog.title')}</DialogTitle>
                     <DialogDescription>
                         {t('open_diagram_dialog.description')}
@@ -151,6 +182,11 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                     <TableHead>
                                         {t(
                                             'open_diagram_dialog.table_columns.name'
+                                        )}
+                                    </TableHead>
+                                    <TableHead>
+                                        {t(
+                                            'open_diagram_dialog.table_columns.project'
                                         )}
                                     </TableHead>
                                     <TableHead className="hidden items-center sm:inline-flex">
@@ -215,6 +251,16 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             </div>
                                         </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary">
+                                                {projectMap.get(
+                                                    diagram.projectId ?? ''
+                                                )?.name ??
+                                                    t(
+                                                        'open_diagram_dialog.personal_project'
+                                                    )}
+                                            </Badge>
+                                        </TableCell>
                                         <TableCell className="hidden items-center sm:table-cell">
                                             {diagram.createdAt.toLocaleString()}
                                         </TableCell>

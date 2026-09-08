@@ -347,9 +347,11 @@ export const zh_TW: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: '開啟資料庫',
             description: '請從以下列表中選擇一個圖表。',
             table_columns: {
+                project: 'Project',
                 name: '名稱',
                 created_at: '創建時間',
                 last_modified: '最後修改時間',

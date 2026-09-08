@@ -354,9 +354,11 @@ export const id_ID: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Buka Database',
             description: 'Pilih diagram untuk dibuka dari daftar di bawah.',
             table_columns: {
+                project: 'Project',
                 name: 'Name',
                 created_at: 'Dibuat pada',
                 last_modified: 'Terakhir diubah',

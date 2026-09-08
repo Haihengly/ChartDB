@@ -38,7 +38,7 @@ export const useDiagramLoader = () => {
                 resetUndoStack();
                 const diagram = await loadDiagram(diagramId);
                 if (!diagram) {
-                    openOpenDiagramDialog({ canClose: false });
+                    openOpenDiagramDialog({ canClose: true });
                     hideLoader();
                     return;
                 }
@@ -47,18 +47,12 @@ export const useDiagramLoader = () => {
                 hideLoader();
 
                 return;
-            } else if (!diagramId && config.defaultDiagramId) {
-                const diagram = await loadDiagram(config.defaultDiagramId);
-                if (diagram) {
-                    navigate(`/diagrams/${config.defaultDiagramId}`);
-
-                    return;
-                }
             }
-            const diagrams = await listDiagrams();
+
+            const diagrams = await listDiagrams({ fetchAll: true });
 
             if (diagrams.length > 0) {
-                openOpenDiagramDialog({ canClose: false });
+                openOpenDiagramDialog({ canClose: true });
             } else {
                 openCreateDiagramDialog();
             }

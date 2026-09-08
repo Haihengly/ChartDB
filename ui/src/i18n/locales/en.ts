@@ -348,8 +348,10 @@ export const en = {
         open_diagram_dialog: {
             title: 'Open Database',
             description: 'Select a diagram to open from the list below.',
+            personal_project: 'Personal',
             table_columns: {
                 name: 'Name',
+                project: 'Project',
                 created_at: 'Created at',
                 last_modified: 'Last modified',
                 tables_count: 'Tables',

@@ -352,10 +352,12 @@ export const fr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Ouvrir Base de Données',
             description:
                 'Sélectionnez un diagramme à ouvrir dans la liste ci-dessous.',
             table_columns: {
+                project: 'Project',
                 name: 'Nom',
                 created_at: 'Créé le',
                 last_modified: 'Dernière modification',

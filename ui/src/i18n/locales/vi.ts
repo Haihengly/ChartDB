@@ -354,9 +354,11 @@ export const vi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Mở cơ sở dữ liệu',
             description: 'Chọn sơ đồ để mở từ danh sách bên dưới.',
             table_columns: {
+                project: 'Project',
                 name: 'Tên',
                 created_at: 'Tạo vào lúc',
                 last_modified: 'Lần cuối chỉnh sửa',

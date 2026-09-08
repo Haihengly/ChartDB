@@ -356,9 +356,11 @@ export const te: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'డేటాబేస్ తెరవండి',
             description: 'కింద ఉన్న జాబితా నుండి చిత్రాన్ని ఎంచుకోండి.',
             table_columns: {
+                project: 'Project',
                 name: 'పేరు',
                 created_at: 'రచించబడిన తేదీ',
                 last_modified: 'చివరి సవరణ',

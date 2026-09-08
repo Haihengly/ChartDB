@@ -349,9 +349,11 @@ export const ar: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'فتح قاعدة بيانات',
             description: 'اختر مخططًا لفتحه من القائمة ادناه',
             table_columns: {
+                project: 'Project',
                 name: 'الإسم',
                 created_at: 'تاريخ الإنشاء',
                 last_modified: 'آخر تعديل',

@@ -354,10 +354,12 @@ export const uk: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            personal_project: 'Personal',
             title: 'Відкрити базу даних',
             description:
                 'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
             table_columns: {
+                project: 'Project',
                 name: 'Назва',
                 created_at: 'Створено0',
                 last_modified: 'Востаннє змінено',
