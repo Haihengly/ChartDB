@@ -374,6 +374,7 @@ export const ne: LanguageTranslation = {
             diagram_actions: {
                 open: 'खोल्नुहोस्',
                 duplicate: 'डुप्लिकेट',
+                rename: 'पुन: नामाकरण गर्नुहोस्',
                 delete: 'मेटाउनुहोस्',
             },
         },

@@ -375,6 +375,7 @@ export const ja: LanguageTranslation = {
             diagram_actions: {
                 open: '開く',
                 duplicate: '複製',
+                rename: '名前を変更',
                 delete: '削除',
             },
         },

@@ -371,6 +371,7 @@ export const ko_KR: LanguageTranslation = {
             diagram_actions: {
                 open: '열기',
                 duplicate: '복제',
+                rename: '이름 변경',
                 delete: '삭제',
             },
         },

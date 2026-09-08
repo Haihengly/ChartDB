@@ -378,6 +378,7 @@ export const mr: LanguageTranslation = {
             diagram_actions: {
                 open: 'उघडा',
                 duplicate: 'डुप्लिकेट',
+                rename: 'नाव बदला',
                 delete: 'हटवा',
             },
         },

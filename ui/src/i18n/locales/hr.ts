@@ -367,6 +367,7 @@ export const hr: LanguageTranslation = {
             diagram_actions: {
                 open: 'Otvori',
                 duplicate: 'Dupliciraj',
+                rename: 'Preimenuj',
                 delete: 'Obriši',
             },
         },

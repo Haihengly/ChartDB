@@ -371,6 +371,7 @@ export const ru: LanguageTranslation = {
             diagram_actions: {
                 open: 'Открыть',
                 duplicate: 'Дублировать',
+                rename: 'Переименовать',
                 delete: 'Удалить',
             },
         },

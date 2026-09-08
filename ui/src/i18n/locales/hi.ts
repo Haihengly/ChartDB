@@ -375,6 +375,7 @@ export const hi: LanguageTranslation = {
             diagram_actions: {
                 open: 'खोलें',
                 duplicate: 'डुप्लिकेट',
+                rename: 'नाम बदलें',
                 delete: 'हटाएं',
             },
         },

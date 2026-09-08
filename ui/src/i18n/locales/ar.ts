@@ -366,6 +366,7 @@ export const ar: LanguageTranslation = {
             diagram_actions: {
                 open: 'فتح',
                 duplicate: 'تكرار',
+                rename: 'إعادة تسمية',
                 delete: 'حذف',
             },
         },

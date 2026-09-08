@@ -367,6 +367,7 @@ export const tr: LanguageTranslation = {
             diagram_actions: {
                 open: 'Aç',
                 duplicate: 'Kopyala',
+                rename: 'Yeniden Adlandır',
                 delete: 'Sil',
             },
         },

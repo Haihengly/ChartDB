@@ -370,6 +370,7 @@ export const fr: LanguageTranslation = {
             diagram_actions: {
                 open: 'Ouvrir',
                 duplicate: 'Dupliquer',
+                rename: 'Renommer',
                 delete: 'Supprimer',
             },
         },

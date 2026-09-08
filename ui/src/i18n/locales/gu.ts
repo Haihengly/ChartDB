@@ -371,6 +371,7 @@ export const gu: LanguageTranslation = {
             diagram_actions: {
                 open: 'ખોલો',
                 duplicate: 'ડુપ્લિકેટ',
+                rename: 'નામ બદલો',
                 delete: 'કાઢી નાખો',
             },
         },

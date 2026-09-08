@@ -373,6 +373,7 @@ export const te: LanguageTranslation = {
             diagram_actions: {
                 open: 'తెరవు',
                 duplicate: 'నకలు',
+                rename: 'పేరు మార్చు',
                 delete: 'తొలగించు',
             },
         },

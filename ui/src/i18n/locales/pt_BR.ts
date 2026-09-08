@@ -374,6 +374,7 @@ export const pt_BR: LanguageTranslation = {
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
+                rename: 'Renomear',
                 delete: 'Excluir',
             },
         },

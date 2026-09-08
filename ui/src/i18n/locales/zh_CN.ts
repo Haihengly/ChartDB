@@ -365,6 +365,7 @@ export const zh_CN: LanguageTranslation = {
             diagram_actions: {
                 open: '打开',
                 duplicate: '复制',
+                rename: '重命名',
                 delete: '删除',
             },
         },

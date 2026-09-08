@@ -371,6 +371,7 @@ export const vi: LanguageTranslation = {
             diagram_actions: {
                 open: 'Mở',
                 duplicate: 'Nhân bản',
+                rename: 'Đổi tên',
                 delete: 'Xóa',
             },
         },

@@ -371,6 +371,7 @@ export const id_ID: LanguageTranslation = {
             diagram_actions: {
                 open: 'Buka',
                 duplicate: 'Duplikat',
+                rename: 'Ganti nama',
                 delete: 'Hapus',
             },
         },

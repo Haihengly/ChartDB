@@ -372,6 +372,7 @@ export const uk: LanguageTranslation = {
             diagram_actions: {
                 open: 'Відкрити',
                 duplicate: 'Дублювати',
+                rename: 'Перейменувати',
                 delete: 'Видалити',
             },
         },

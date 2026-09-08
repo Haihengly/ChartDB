@@ -374,6 +374,7 @@ export const bn: LanguageTranslation = {
             diagram_actions: {
                 open: 'খুলুন',
                 duplicate: 'ডুপ্লিকেট',
+                rename: 'পুনঃনামকরণ',
                 delete: 'মুছুন',
             },
         },
