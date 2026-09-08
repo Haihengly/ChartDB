@@ -6,7 +6,7 @@ import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export const useDiagramLoader = () => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
@@ -17,6 +17,7 @@ export const useDiagramLoader = () => {
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const navigate = useNavigate();
+    const location = useLocation();
     const { listDiagrams } = useStorage();
 
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
@@ -30,7 +31,14 @@ export const useDiagramLoader = () => {
             return;
         }
 
+        const state = location.state as { preventAutoModal?: boolean } | null;
+
         const loadDefaultDiagram = async () => {
+            if (state?.preventAutoModal) {
+                setInitialDiagram(undefined);
+                return;
+            }
+
             if (diagramId) {
                 setInitialDiagram(undefined);
                 showLoader();
@@ -80,6 +88,7 @@ export const useDiagramLoader = () => {
         showLoader,
         currentDiagram?.id,
         openOpenDiagramDialog,
+        location.state,
     ]);
 
     return { initialDiagram };

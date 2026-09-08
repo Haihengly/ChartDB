@@ -69,7 +69,7 @@ export const Menu: React.FC<MenuProps> = () => {
 
     const handleDeleteDiagramAction = useCallback(() => {
         deleteDiagram();
-        navigate('/');
+        navigate('/', { state: { preventAutoModal: true } });
     }, [deleteDiagram, navigate]);
 
     const createNewDiagram = () => {

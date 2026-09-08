@@ -31,6 +31,7 @@ import {
 } from '@/components/dialog/dialog';
 import { Input } from '@/components/input/input';
 import { Label } from '@/components/label/label';
+import { useNavigate } from 'react-router-dom';
 
 interface DiagramRowActionsMenuProps {
     diagram: Diagram;
@@ -53,15 +54,23 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     const [isRenameOpen, setIsRenameOpen] = useState(false);
     const [nameInput, setNameInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
         deleteDiagram(diagram.id);
         refetch();
 
         if (diagram.id === diagramId || numberOfDiagrams <= 1) {
-            window.location.href = '/';
+            navigate('/', { state: { preventAutoModal: true } });
         }
-    }, [deleteDiagram, diagram.id, diagramId, refetch, numberOfDiagrams]);
+    }, [
+        deleteDiagram,
+        diagram.id,
+        diagramId,
+        refetch,
+        numberOfDiagrams,
+        navigate,
+    ]);
 
     const onDuplicate = useCallback(async () => {
         const duplicatedDiagram = cloneDiagram(diagram);

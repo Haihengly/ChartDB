@@ -587,13 +587,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     const addDiagram: StorageContext['addDiagram'] = useCallback(
-        async ({ diagram }) => {
+        async ({ diagram, projectId }) => {
             diagramsCache.current.set(diagram.id, diagram);
             try {
                 const payload = {
                     id: diagram.id,
                     name: diagram.name,
-                    projectId: activeProject?.id,
+                    projectId: projectId ?? activeProject?.id,
                     content: {
                         databaseType: diagram.databaseType,
                         databaseEdition: diagram.databaseEdition,

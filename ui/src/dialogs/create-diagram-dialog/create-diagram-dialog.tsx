@@ -27,11 +27,15 @@ import {
     importDBMLToDiagram,
 } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
+import { useProject } from '@/hooks/use-project';
 
-export interface CreateDiagramDialogProps extends BaseDialogProps {}
+export interface CreateDiagramDialogProps extends BaseDialogProps {
+    defaultProjectId?: string;
+}
 
 export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
+    defaultProjectId,
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
@@ -53,6 +57,16 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
     const [isParsingMetadata, setIsParsingMetadata] = useState(false);
+    const { activeProject } = useProject();
+    const [selectedProjectId, setSelectedProjectId] = useState<
+        string | undefined
+    >();
+
+    useEffect(() => {
+        if (dialog.open) {
+            setSelectedProjectId(defaultProjectId ?? activeProject?.id);
+        }
+    }, [dialog.open, defaultProjectId, activeProject?.id]);
 
     useEffect(() => {
         setDatabaseEdition(undefined);
@@ -127,7 +141,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 });
             }
 
-            await addDiagram({ diagram });
+            await addDiagram({ diagram, projectId: selectedProjectId });
             await updateConfig({
                 config: { defaultDiagramId: diagram.id },
             });
@@ -145,6 +159,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updateConfig,
             scriptResult,
             diagramNumber,
+            selectedProjectId,
         ]
     );
 
@@ -161,7 +176,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        await addDiagram({ diagram });
+        await addDiagram({ diagram, projectId: selectedProjectId });
         await updateConfig({ config: { defaultDiagramId: diagram.id } });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
@@ -173,6 +188,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         navigate,
         updateConfig,
         diagramNumber,
+        selectedProjectId,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {
@@ -246,6 +262,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         databaseType={databaseType}
                         hasExistingDiagram={hasExistingDiagram}
                         setDatabaseType={setDatabaseType}
+                        selectedProjectId={selectedProjectId}
+                        setSelectedProjectId={setSelectedProjectId}
                         onContinue={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }

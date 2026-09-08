@@ -12,6 +12,16 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { useTranslation } from 'react-i18next';
 import { SelectDatabaseContent } from './select-database-content';
 import { useDialog } from '@/hooks/use-dialog';
+import { useProject } from '@/hooks/use-project';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/select/select';
+import { Label } from '@/components/label/label';
+import { Folder } from 'lucide-react';
 
 export interface SelectDatabaseProps {
     onContinue: () => void;
@@ -19,6 +29,10 @@ export interface SelectDatabaseProps {
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
     hasExistingDiagram: boolean;
     createNewDiagram: () => void;
+    selectedProjectId?: string;
+    setSelectedProjectId: React.Dispatch<
+        React.SetStateAction<string | undefined>
+    >;
 }
 
 export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
@@ -27,9 +41,12 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
     setDatabaseType,
     hasExistingDiagram,
     createNewDiagram,
+    selectedProjectId,
+    setSelectedProjectId,
 }) => {
     const { t } = useTranslation();
     const { openImportDiagramDialog } = useDialog();
+    const { projects } = useProject();
 
     return (
         <>
@@ -42,6 +59,34 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                 </DialogDescription>
             </DialogHeader>
             <DialogInternalContent>
+                {projects.length > 0 && (
+                    <div className="mb-4 flex flex-col gap-1.5 px-1">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            Project
+                        </Label>
+                        <Select
+                            value={selectedProjectId || projects[0]?.id}
+                            onValueChange={(val) => setSelectedProjectId(val)}
+                        >
+                            <SelectTrigger className="w-full">
+                                <div className="flex items-center gap-2">
+                                    <Folder className="size-4 text-muted-foreground" />
+                                    <SelectValue placeholder="Select a project" />
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {projects.map((project) => (
+                                    <SelectItem
+                                        key={project.id}
+                                        value={project.id}
+                                    >
+                                        {project.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                )}
                 <SelectDatabaseContent
                     databaseType={databaseType}
                     onContinue={onContinue}

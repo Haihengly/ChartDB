@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ChevronDown,
@@ -24,7 +24,7 @@ export const ProjectsSection: React.FC = () => {
     const { listDiagrams } = useStorage();
     const { openCreateProjectDialog, openProjectMembersDialog } = useDialog();
     const navigate = useNavigate();
-    const { id: diagramId } = useParams<{ id: string }>();
+    const { diagramId } = useParams<{ diagramId: string }>();
 
     const [memberCounts, setMemberCounts] = useState<Record<string, number>>(
         {}
@@ -36,13 +36,7 @@ export const ProjectsSection: React.FC = () => {
         Record<string, boolean>
     >({});
 
-    const refetch = async () => {
-        // Simple re-fetch all for simplicity for now
-        // A more optimal approach would be to refetch only specific project
-        window.location.reload();
-    };
-
-    useEffect(() => {
+    const fetchProjectData = useCallback(async () => {
         projects.forEach(async (project) => {
             // Fetch members
             try {
@@ -86,6 +80,14 @@ export const ProjectsSection: React.FC = () => {
             }
         });
     }, [projects, listDiagrams, listMembers, diagramId]);
+
+    useEffect(() => {
+        fetchProjectData();
+    }, [fetchProjectData]);
+
+    const refetch = async () => {
+        await fetchProjectData();
+    };
 
     const toggleProject = (projectId: string) => {
         setExpandedProjects((prev) => ({

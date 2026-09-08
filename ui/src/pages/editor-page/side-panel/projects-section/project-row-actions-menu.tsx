@@ -7,8 +7,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Button } from '@/components/button/button';
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import { Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useProject } from '@/hooks/use-project';
+import { useDialog } from '@/hooks/use-dialog';
 import type { Project } from '@/lib/domain/project';
 import {
     Dialog,
@@ -41,6 +42,7 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     project,
 }) => {
     const { renameProject, deleteProject } = useProject();
+    const { openCreateDiagramDialog } = useDialog();
     const { t } = useTranslation();
 
     const [isRenameOpen, setIsRenameOpen] = useState(false);
@@ -48,11 +50,13 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     const [nameInput, setNameInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // If user is not an owner, hide/disable the menu or don't render actions
     const isOwner = project.role === 'owner';
-    if (!isOwner) {
-        return null;
-    }
+
+    const onNewDiagramClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCreateDiagramDialog({ defaultProjectId: project.id });
+    };
 
     const onRenameClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -116,27 +120,40 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
                     onClick={(e) => e.stopPropagation()}
                 >
                     <DropdownMenuItem
-                        onClick={onRenameClick}
+                        onClick={onNewDiagramClick}
                         className="flex justify-between gap-4"
                     >
-                        {t(
-                            'open_diagram_dialog.diagram_actions.rename',
-                            'Rename'
-                        )}
-                        <Pencil className="size-3.5" />
+                        {t('editor_sidebar.new_diagram', 'New diagram')}
+                        <Plus className="size-3.5" />
                     </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                        onClick={onDeleteClick}
-                        className="flex justify-between gap-4 text-red-700 hover:text-red-700 focus:text-red-700"
-                    >
-                        {t(
-                            'open_diagram_dialog.diagram_actions.delete',
-                            'Delete'
-                        )}
-                        <Trash2 className="size-3.5 text-red-700" />
-                    </DropdownMenuItem>
+                    {isOwner && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={onRenameClick}
+                                className="flex justify-between gap-4"
+                            >
+                                {t(
+                                    'open_diagram_dialog.diagram_actions.rename',
+                                    'Rename'
+                                )}
+                                <Pencil className="size-3.5" />
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={onDeleteClick}
+                                className="flex justify-between gap-4 text-red-700 hover:text-red-700 focus:text-red-700"
+                            >
+                                {t(
+                                    'open_diagram_dialog.diagram_actions.delete',
+                                    'Delete'
+                                )}
+                                <Trash2 className="size-3.5 text-red-700" />
+                            </DropdownMenuItem>
+                        </>
+                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
 
