@@ -639,11 +639,6 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 return data.map((d) => {
                     const content = d.content || {};
                     // Handle optimized metadata payload where tablesCount is returned instead of full tables array
-                    const tables =
-                        content.tables ||
-                        (content.tablesCount !== undefined
-                            ? new Array(content.tablesCount).fill({})
-                            : []);
                     const diagram: Diagram = {
                         id: d.id,
                         name: d.name,
@@ -651,7 +646,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         databaseType:
                             content.databaseType || DatabaseType.GENERIC,
                         databaseEdition: content.databaseEdition,
-                        tables: tables,
+                        tables: content.tables || [],
+                        tablesCount:
+                            content.tablesCount ?? content.tables?.length ?? 0,
                         relationships: content.relationships || [],
                         dependencies: content.dependencies || [],
                         areas: content.areas || [],
@@ -660,7 +657,6 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         createdAt: new Date(d.createdAt),
                         updatedAt: new Date(d.updatedAt),
                     };
-                    diagramsCache.current.set(diagram.id, diagram);
                     return diagram;
                 });
             } catch (error) {

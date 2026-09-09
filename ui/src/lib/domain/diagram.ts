@@ -20,6 +20,7 @@ export interface Diagram {
     databaseType: DatabaseType;
     databaseEdition?: DatabaseEdition;
     tables?: DBTable[];
+    tablesCount?: number;
     relationships?: DBRelationship[];
     dependencies?: DBDependency[];
     areas?: Area[];
@@ -36,6 +37,7 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     databaseType: z.nativeEnum(DatabaseType),
     databaseEdition: z.nativeEnum(DatabaseEdition).optional(),
     tables: z.array(dbTableSchema).optional(),
+    tablesCount: z.number().optional(),
     relationships: z.array(dbRelationshipSchema).optional(),
     dependencies: z.array(dbDependencySchema).optional(),
     areas: z.array(areaSchema).optional(),

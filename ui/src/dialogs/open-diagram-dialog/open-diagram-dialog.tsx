@@ -268,7 +268,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             {diagram.updatedAt.toLocaleString()}
                                         </TableCell>
                                         <TableCell className="text-center">
-                                            {diagram.tables?.length}
+                                            {diagram.tablesCount ??
+                                                diagram.tables?.length ??
+                                                0}
                                         </TableCell>
                                         <TableCell className="items-center p-0 pr-1 text-right">
                                             <DiagramRowActionsMenu
