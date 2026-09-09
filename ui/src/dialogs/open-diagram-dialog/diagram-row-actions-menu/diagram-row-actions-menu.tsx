@@ -53,11 +53,13 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
         useStorage();
     const { t } = useTranslation();
     const [isRenameOpen, setIsRenameOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [nameInput, setNameInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
+        setIsDropdownOpen(false);
         await deleteDiagram(diagram.id);
         refetch();
 
@@ -74,6 +76,7 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     ]);
 
     const onDuplicate = useCallback(async () => {
+        setIsDropdownOpen(false);
         const fullDiagram = await getDiagram(diagram.id);
         if (!fullDiagram) {
             return;
@@ -100,6 +103,7 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
             e.preventDefault();
             e.stopPropagation();
             setNameInput(diagram.name);
+            setIsDropdownOpen(false);
             setIsRenameOpen(true);
         },
         [diagram.name]
@@ -132,7 +136,10 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
 
     return (
         <>
-            <DropdownMenu>
+            <DropdownMenu
+                open={isDropdownOpen}
+                onOpenChange={setIsDropdownOpen}
+            >
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
@@ -145,7 +152,10 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                        onClick={onOpen}
+                        onClick={() => {
+                            setIsDropdownOpen(false);
+                            onOpen();
+                        }}
                         className="flex justify-between gap-4"
                     >
                         {t('open_diagram_dialog.diagram_actions.open')}

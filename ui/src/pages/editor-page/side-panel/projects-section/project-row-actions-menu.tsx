@@ -46,6 +46,7 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     const { t } = useTranslation();
 
     const [isRenameOpen, setIsRenameOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [nameInput, setNameInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +56,7 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     const onNewDiagramClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsMenuOpen(false);
         openCreateDiagramDialog({ defaultProjectId: project.id });
     };
 
@@ -62,12 +64,14 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
         e.preventDefault();
         e.stopPropagation();
         setNameInput(project.name);
+        setIsMenuOpen(false);
         setIsRenameOpen(true);
     };
 
     const onDeleteClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsMenuOpen(false);
         setIsDeleteOpen(true);
     };
 
@@ -104,7 +108,7 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
 
     return (
         <>
-            <DropdownMenu>
+            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"

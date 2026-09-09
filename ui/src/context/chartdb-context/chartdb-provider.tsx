@@ -51,6 +51,9 @@ export const ChartDBProvider: React.FC<
 
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
+    const [diagramProjectId, setDiagramProjectId] = useState<
+        string | undefined
+    >(diagram?.projectId);
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
     const [diagramUpdatedAt, setDiagramUpdatedAt] = useState<Date>(new Date());
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
@@ -144,6 +147,7 @@ export const ChartDBProvider: React.FC<
         () => ({
             id: diagramId,
             name: diagramName,
+            projectId: diagramProjectId,
             createdAt: diagramCreatedAt,
             updatedAt: diagramUpdatedAt,
             databaseType,
@@ -158,6 +162,7 @@ export const ChartDBProvider: React.FC<
         [
             diagramId,
             diagramName,
+            diagramProjectId,
             databaseType,
             databaseEdition,
             tables,
@@ -200,6 +205,7 @@ export const ChartDBProvider: React.FC<
         useCallback(async () => {
             setDiagramId('');
             setDiagramName('');
+            setDiagramProjectId(undefined);
             setDatabaseType(DatabaseType.GENERIC);
             setDatabaseEdition(undefined);
             setTables([]);
@@ -1884,6 +1890,7 @@ export const ChartDBProvider: React.FC<
             (diagram) => {
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
+                setDiagramProjectId(diagram.projectId);
                 setDatabaseType(diagram.databaseType);
                 setDatabaseEdition(diagram.databaseEdition);
                 setTables(diagram.tables ?? []);
@@ -1904,6 +1911,7 @@ export const ChartDBProvider: React.FC<
             [
                 setDiagramId,
                 setDiagramName,
+                setDiagramProjectId,
                 setDatabaseType,
                 setDatabaseEdition,
                 setTables,
