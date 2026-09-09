@@ -107,7 +107,9 @@ export const NotesList: React.FC<NotesListProps> = ({ notes }) => {
                             }
 
                             // if both notes don't have order, sort by content
-                            return note1.content.localeCompare(note2.content);
+                            return (note1.content || '').localeCompare(
+                                note2.content || ''
+                            );
                         })
                         .map((note) => (
                             <NoteListItem

@@ -107,7 +107,9 @@ export const AreaList: React.FC<AreaListProps> = ({ areas }) => {
                             }
 
                             // if both areas don't have order, sort by name
-                            return area1.name.localeCompare(area2.name);
+                            return (area1.name || '').localeCompare(
+                                area2.name || ''
+                            );
                         })
                         .map((area) => (
                             <AreaListItem

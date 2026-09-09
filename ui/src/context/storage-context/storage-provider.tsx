@@ -54,35 +54,36 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         return diagram;
     }, []);
 
+    const saveDiagramDirectly = useCallback(async (diagram: Diagram) => {
+        try {
+            const payload = {
+                name: diagram.name,
+                content: {
+                    databaseType: diagram.databaseType,
+                    databaseEdition: diagram.databaseEdition,
+                    tables: diagram.tables || [],
+                    relationships: diagram.relationships || [],
+                    dependencies: diagram.dependencies || [],
+                    areas: diagram.areas || [],
+                    customTypes: diagram.customTypes || [],
+                    notes: diagram.notes || [],
+                },
+            };
+            await apiFetch(`${API_URL}/diagrams/${diagram.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+        } catch (error) {
+            console.error('Failed to save diagram to backend:', error);
+        }
+    }, []);
+
     const saveDiagramToBackend = useMemo(
-        () =>
-            debounce(async (diagram: Diagram) => {
-                try {
-                    const payload = {
-                        name: diagram.name,
-                        content: {
-                            databaseType: diagram.databaseType,
-                            databaseEdition: diagram.databaseEdition,
-                            tables: diagram.tables || [],
-                            relationships: diagram.relationships || [],
-                            dependencies: diagram.dependencies || [],
-                            areas: diagram.areas || [],
-                            customTypes: diagram.customTypes || [],
-                            notes: diagram.notes || [],
-                        },
-                    };
-                    await apiFetch(`${API_URL}/diagrams/${diagram.id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload),
-                    });
-                } catch (error) {
-                    console.error('Failed to save diagram to backend:', error);
-                }
-            }, 1000),
-        []
+        () => debounce(saveDiagramDirectly, 1000),
+        [saveDiagramDirectly]
     );
 
     const triggerSave = useCallback(
@@ -294,7 +295,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         async (diagramId): Promise<DBRelationship[]> => {
             const diagram = getDiagramFromCache(diagramId);
             return [...(diagram.relationships || [])].sort((a, b) =>
-                a.name.localeCompare(b.name)
+                (a.name || '').localeCompare(b.name || '')
             );
         },
         [getDiagramFromCache]
@@ -501,7 +502,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         async (diagramId): Promise<DBCustomType[]> => {
             const diagram = getDiagramFromCache(diagramId);
             return [...(diagram.customTypes || [])].sort((a, b) =>
-                a.name.localeCompare(b.name)
+                (a.name || '').localeCompare(b.name || '')
             );
         },
         [getDiagramFromCache]
@@ -682,6 +683,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 const diagram: Diagram = {
                     id: d.id,
                     name: d.name,
+                    projectId: d.projectId,
                     databaseType: content.databaseType || DatabaseType.GENERIC,
                     databaseEdition: content.databaseEdition,
                     tables: content.tables || [],
@@ -707,7 +709,28 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         async ({ id, attributes }) => {
             const diagram = getDiagramFromCache(id);
             Object.assign(diagram, attributes);
-            triggerSave(id);
+            diagram.updatedAt = new Date();
+
+            if (attributes.name !== undefined) {
+                try {
+                    await apiFetch(`${API_URL}/diagrams/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name: attributes.name }),
+                    });
+                } catch (error) {
+                    console.error('Failed to rename diagram directly', error);
+                }
+            }
+
+            // Always trigger a local save for other attributes,
+            // but the debounce won't wipe out tables for rename updates
+            // as it will happen in the background if they open it
+            if (Object.keys(attributes).some((k) => k !== 'name')) {
+                triggerSave(id);
+            }
         },
         [getDiagramFromCache, triggerSave]
     );

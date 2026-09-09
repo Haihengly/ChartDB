@@ -120,7 +120,7 @@ export const ChartDBProvider: React.FC<
                       .sort((a, b) => {
                           if (a === defaultSchemaName) return -1;
                           if (b === defaultSchemaName) return 1;
-                          return a.localeCompare(b);
+                          return (a || '').localeCompare(b || '');
                       })
                       .map(
                           (schema): DBSchema => ({

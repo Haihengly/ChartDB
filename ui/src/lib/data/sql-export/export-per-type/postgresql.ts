@@ -130,7 +130,7 @@ function exportCustomTypes(customTypes: DBCustomType[]): string {
         ) {
             return 1;
         }
-        return a.name.localeCompare(b.name);
+        return (a.name || '').localeCompare(b.name || '');
     });
 
     sortedTypes.forEach((customType) => {

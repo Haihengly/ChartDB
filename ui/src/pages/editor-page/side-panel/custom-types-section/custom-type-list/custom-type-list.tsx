@@ -137,8 +137,8 @@ export const CustomTypeList: React.FC<CustomTypeProps> = ({ customTypes }) => {
                                 }
 
                                 // sort by name
-                                return customType1.name.localeCompare(
-                                    customType2.name
+                                return (customType1.name || '').localeCompare(
+                                    customType2.name || ''
                                 );
                             }
                         )

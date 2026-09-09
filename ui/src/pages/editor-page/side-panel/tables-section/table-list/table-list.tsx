@@ -129,7 +129,9 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
                             // if both tables don't have order, sort by name
                             if (table1.isView === table2.isView) {
                                 // Both are either tables or views, so sort alphabetically by name
-                                return table1.name.localeCompare(table2.name);
+                                return (table1.name || '').localeCompare(
+                                    table2.name || ''
+                                );
                             }
                             // If one is a view and the other is not, put tables first
                             return table1.isView ? 1 : -1;

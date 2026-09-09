@@ -246,7 +246,7 @@ export async function sqlImportToDiagram({
         .sort((a, b) => {
             if (a.isView === b.isView) {
                 // Both are either tables or views, so sort alphabetically by name
-                return a.name.localeCompare(b.name);
+                return (a.name || '').localeCompare(b.name || '');
             }
             // If one is a view and the other is not, put tables first
             return a.isView ? 1 : -1;

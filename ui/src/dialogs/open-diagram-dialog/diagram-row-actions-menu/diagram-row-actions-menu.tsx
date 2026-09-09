@@ -49,7 +49,8 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     triggerClassName,
 }) => {
     const { diagramId, updateDiagramName } = useChartDB();
-    const { deleteDiagram, addDiagram, updateDiagram } = useStorage();
+    const { deleteDiagram, addDiagram, updateDiagram, getDiagram } =
+        useStorage();
     const { t } = useTranslation();
     const [isRenameOpen, setIsRenameOpen] = useState(false);
     const [nameInput, setNameInput] = useState('');
@@ -57,7 +58,7 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
-        deleteDiagram(diagram.id);
+        await deleteDiagram(diagram.id);
         refetch();
 
         if (diagram.id === diagramId || numberOfDiagrams <= 1) {
@@ -73,8 +74,12 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     ]);
 
     const onDuplicate = useCallback(async () => {
-        const duplicatedDiagram = cloneDiagram(diagram);
+        const fullDiagram = await getDiagram(diagram.id);
+        if (!fullDiagram) {
+            return;
+        }
 
+        const duplicatedDiagram = cloneDiagram(fullDiagram);
         const diagramToAdd = duplicatedDiagram.diagram;
 
         if (!diagramToAdd) {
@@ -83,9 +88,12 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
 
         diagramToAdd.name = `${diagram.name} (Copy)`;
 
-        addDiagram({ diagram: diagramToAdd });
+        await addDiagram({
+            diagram: diagramToAdd,
+            projectId: fullDiagram.projectId,
+        });
         refetch();
-    }, [addDiagram, refetch, diagram]);
+    }, [addDiagram, getDiagram, refetch, diagram]);
 
     const onRenameClick = useCallback(
         (e: React.MouseEvent) => {

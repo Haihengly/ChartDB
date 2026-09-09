@@ -107,7 +107,9 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
             });
         });
 
-        return tables.sort((a, b) => a.fullName.localeCompare(b.fullName));
+        return tables.sort((a, b) =>
+            (a.fullName || '').localeCompare(b.fullName || '')
+        );
     }, [databaseMetadata?.tables, databaseMetadata?.views]);
 
     // Count tables and views separately

@@ -61,7 +61,7 @@ export const sortDataTypes = (dataTypes: DataTypeData[]): DataTypeData[] => {
         if ((a.usageLevel || 3) < (b.usageLevel || 3)) return -1;
         if ((a.usageLevel || 3) > (b.usageLevel || 3)) return 1;
         // Then sort alphabetically by name
-        return a.name.localeCompare(b.name);
+        return (a.name || '').localeCompare(b.name || '');
     });
 };
 

@@ -80,9 +80,11 @@ export const generateTreeDataByAreas = ({
 
     // Sort tables within each area
     tablesByArea.forEach((areaTables) => {
-        areaTables.sort((a, b) => a.name.localeCompare(b.name));
+        areaTables.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     });
-    tablesWithoutArea.sort((a, b) => a.name.localeCompare(b.name));
+    tablesWithoutArea.sort((a, b) =>
+        (a.name || '').localeCompare(b.name || '')
+    );
 
     // Create nodes for areas
     areas.forEach((area) => {
@@ -183,7 +185,7 @@ export const generateTreeDataBySchemas = ({
 
     // Sort tables within each schema
     tablesBySchema.forEach((tables) => {
-        tables.sort((a, b) => a.name.localeCompare(b.name));
+        tables.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     });
 
     tablesBySchema.forEach((schemaTables, schemaName) => {

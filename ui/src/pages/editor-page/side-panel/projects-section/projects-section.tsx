@@ -37,48 +37,50 @@ export const ProjectsSection: React.FC = () => {
     >({});
 
     const fetchProjectData = useCallback(async () => {
-        projects.forEach(async (project) => {
-            // Fetch members
-            try {
-                const members = await listMembers(project.id);
-                setMemberCounts((prev) => ({
-                    ...prev,
-                    [project.id]: members.length,
-                }));
-            } catch (error) {
-                console.error(
-                    'Failed to load members for project:',
-                    project.id,
-                    error
-                );
-            }
-
-            // Fetch diagrams
-            try {
-                const diagrams = await listDiagrams({
-                    projectId: project.id,
-                    includeTables: true,
-                });
-                setProjectDiagrams((prev) => ({
-                    ...prev,
-                    [project.id]: diagrams,
-                }));
-
-                // Auto expand if project contains active diagram
-                if (diagramId && diagrams.some((d) => d.id === diagramId)) {
-                    setExpandedProjects((prev) => ({
+        await Promise.all(
+            projects.map(async (project) => {
+                // Fetch members
+                try {
+                    const members = await listMembers(project.id);
+                    setMemberCounts((prev) => ({
                         ...prev,
-                        [project.id]: true,
+                        [project.id]: members.length,
                     }));
+                } catch (error) {
+                    console.error(
+                        'Failed to load members for project:',
+                        project.id,
+                        error
+                    );
                 }
-            } catch (error) {
-                console.error(
-                    'Failed to load diagrams for project:',
-                    project.id,
-                    error
-                );
-            }
-        });
+
+                // Fetch diagrams
+                try {
+                    const diagrams = await listDiagrams({
+                        projectId: project.id,
+                        includeTables: true,
+                    });
+                    setProjectDiagrams((prev) => ({
+                        ...prev,
+                        [project.id]: diagrams,
+                    }));
+
+                    // Auto expand if project contains active diagram
+                    if (diagramId && diagrams.some((d) => d.id === diagramId)) {
+                        setExpandedProjects((prev) => ({
+                            ...prev,
+                            [project.id]: true,
+                        }));
+                    }
+                } catch (error) {
+                    console.error(
+                        'Failed to load diagrams for project:',
+                        project.id,
+                        error
+                    );
+                }
+            })
+        );
     }, [projects, listDiagrams, listMembers, diagramId]);
 
     useEffect(() => {

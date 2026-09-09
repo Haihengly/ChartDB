@@ -143,7 +143,7 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                 if (a.type === 'relationship') {
                     const relA = a.relationship!;
                     const relB = b.relationship!;
-                    return relA.name.localeCompare(relB.name);
+                    return (relA.name || '').localeCompare(relB.name || '');
                 } else {
                     const depA = a.dependency!;
                     const depB = b.dependency!;
@@ -151,8 +151,8 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                     const tableAName = getTable(depA.tableId);
                     const tableB = getTable(depB.dependentTableId);
                     const tableBName = getTable(depB.tableId);
-                    return `${tableA?.name}${tableAName?.name}`.localeCompare(
-                        `${tableB?.name}${tableBName?.name}`
+                    return `${tableA?.name || ''}${tableAName?.name || ''}`.localeCompare(
+                        `${tableB?.name || ''}${tableBName?.name || ''}`
                     );
                 }
             });
