@@ -48,7 +48,8 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     const [isRenameOpen, setIsRenameOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [nameInput, setNameInput] = useState('');
+    const [renameNameInput, setRenameNameInput] = useState('');
+    const [deleteConfirmInput, setDeleteConfirmInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const isOwner = project.role === 'owner';
@@ -63,7 +64,7 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
     const onRenameClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setNameInput(project.name);
+        setRenameNameInput(project.name);
         setIsMenuOpen(false);
         setIsRenameOpen(true);
     };
@@ -72,12 +73,13 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
         e.preventDefault();
         e.stopPropagation();
         setIsMenuOpen(false);
+        setDeleteConfirmInput('');
         setIsDeleteOpen(true);
     };
 
     const handleRenameSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const trimmed = nameInput.trim();
+        const trimmed = renameNameInput.trim();
         if (!trimmed || trimmed === project.name) {
             setIsRenameOpen(false);
             return;
@@ -185,8 +187,10 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
                             </Label>
                             <Input
                                 id="project-name"
-                                value={nameInput}
-                                onChange={(e) => setNameInput(e.target.value)}
+                                value={renameNameInput}
+                                onChange={(e) =>
+                                    setRenameNameInput(e.target.value)
+                                }
                                 autoFocus
                             />
                         </div>
@@ -198,7 +202,9 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
                             </DialogClose>
                             <Button
                                 type="submit"
-                                disabled={!nameInput.trim() || isSubmitting}
+                                disabled={
+                                    !renameNameInput.trim() || isSubmitting
+                                }
                             >
                                 {isSubmitting
                                     ? '...'
@@ -228,13 +234,35 @@ export const ProjectRowActionsMenu: React.FC<ProjectRowActionsMenuProps> = ({
                             )}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
+                    <div className="py-3">
+                        <Label htmlFor="confirm-delete" className="text-sm">
+                            Type{' '}
+                            <span className="font-semibold">
+                                {project.name}
+                            </span>{' '}
+                            to confirm deletion:
+                        </Label>
+                        <Input
+                            id="confirm-delete"
+                            value={deleteConfirmInput}
+                            onChange={(e) =>
+                                setDeleteConfirmInput(e.target.value)
+                            }
+                            placeholder={project.name}
+                            className="mt-2"
+                            autoFocus
+                        />
+                    </div>
                     <AlertDialogFooter>
                         <AlertDialogCancel>
                             {t('new_diagram_dialog.cancel', 'Cancel')}
                         </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDeleteConfirm}
-                            disabled={isSubmitting}
+                            disabled={
+                                deleteConfirmInput !== project.name ||
+                                isSubmitting
+                            }
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             {isSubmitting

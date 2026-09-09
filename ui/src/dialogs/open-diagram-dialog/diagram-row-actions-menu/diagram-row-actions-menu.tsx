@@ -29,6 +29,16 @@ import {
     DialogClose,
     DialogDescription,
 } from '@/components/dialog/dialog';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/alert-dialog/alert-dialog';
 import { Input } from '@/components/input/input';
 import { Label } from '@/components/label/label';
 import { useNavigate } from 'react-router-dom';
@@ -56,10 +66,16 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [nameInput, setNameInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
     const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
         setIsDropdownOpen(false);
+        setIsDeleteConfirmOpen(true);
+    }, []);
+
+    const handleDeleteConfirm = useCallback(async () => {
+        setIsDeleteConfirmOpen(false);
         await deleteDiagram(diagram.id);
         refetch();
 
@@ -238,6 +254,42 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
                     </form>
                 </DialogContent>
             </Dialog>
+
+            <AlertDialog
+                open={isDeleteConfirmOpen}
+                onOpenChange={setIsDeleteConfirmOpen}
+            >
+                <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t(
+                                'open_diagram_dialog.diagram_actions.delete',
+                                'Delete Diagram'
+                            )}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t(
+                                'open_diagram_dialog.delete_diagram_description',
+                                `Are you sure you want to delete "${diagram.name}"? This action cannot be undone.`
+                            )}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
+                            {t('new_diagram_dialog.cancel', 'Cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDeleteConfirm}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            {t(
+                                'open_diagram_dialog.diagram_actions.delete',
+                                'Delete'
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 };

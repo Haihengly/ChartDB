@@ -7,6 +7,7 @@ import {
     Plus,
     Users,
     LayoutTemplate,
+    FileText,
 } from 'lucide-react';
 import { useProject } from '@/hooks/use-project';
 import { useStorage } from '@/hooks/use-storage';
@@ -147,6 +148,14 @@ export const ProjectsSection: React.FC = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-1">
+                                    <Badge
+                                        variant="secondary"
+                                        className="flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-normal"
+                                    >
+                                        <FileText className="size-3" />
+                                        {projectDiagrams[project.id]?.length ??
+                                            0}
+                                    </Badge>
                                     <Badge
                                         variant="secondary"
                                         className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full px-2 py-0.5 text-xs font-normal hover:bg-primary/20"
