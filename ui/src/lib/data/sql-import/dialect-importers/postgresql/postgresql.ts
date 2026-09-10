@@ -1452,8 +1452,6 @@ export async function fromPostgres(
                                 const definition = expr.definition;
                                 const rawDataType = String(definition.dataType);
 
-                                // console.log('ALTER TYPE expr:', JSON.stringify(expr, null, 2));
-
                                 // Normalize the type
                                 let normalizedType =
                                     normalizePostgreSQLType(rawDataType);

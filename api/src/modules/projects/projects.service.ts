@@ -47,10 +47,10 @@ export class ProjectsService {
 
   async update(id: string, name: string, currentUserId: string): Promise<ProjectEntity> {
     await this.ensureOwner(id, currentUserId);
-    const project = await this.projectsRepository.findOne({ where: { id } });
-    if (!project) throw new NotFoundException('Project not found.');
-    project.name = name;
-    return this.projectsRepository.save(project);
+    // ensureOwner already verified the project exists via membership check
+    const result = await this.projectsRepository.update({ id }, { name });
+    if (result.affected === 0) throw new NotFoundException('Project not found.');
+    return this.projectsRepository.findOne({ where: { id } }) as Promise<ProjectEntity>;
   }
 
   async remove(id: string, currentUserId: string): Promise<void> {
