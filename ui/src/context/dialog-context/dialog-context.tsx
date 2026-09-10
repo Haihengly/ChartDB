@@ -45,10 +45,6 @@ export interface DialogContext {
     ) => void;
     closeTableSchemaDialog: () => void;
 
-    // Star us dialog
-    openStarUsDialog: () => void;
-    closeStarUsDialog: () => void;
-
     // Create project dialog
     openCreateProjectDialog: () => void;
     closeCreateProjectDialog: () => void;
@@ -89,8 +85,6 @@ export const dialogContext = createContext<DialogContext>({
     closeImportDatabaseDialog: emptyFn,
     openTableSchemaDialog: emptyFn,
     closeTableSchemaDialog: emptyFn,
-    openStarUsDialog: emptyFn,
-    closeStarUsDialog: emptyFn,
     openCreateProjectDialog: emptyFn,
     closeCreateProjectDialog: emptyFn,
     openProjectMembersDialog: emptyFn,
