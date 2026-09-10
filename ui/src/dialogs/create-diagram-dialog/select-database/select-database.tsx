@@ -94,21 +94,22 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                 />
             </DialogInternalContent>
             <DialogFooter className="mt-4 flex !justify-between gap-2">
-                {hasExistingDiagram ? (
+                <div className="flex gap-2">
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
                             {t('new_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
-                ) : (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={openImportDiagramDialog}
-                    >
-                        {t('new_diagram_dialog.import_from_file')}
-                    </Button>
-                )}
+                    {!hasExistingDiagram && (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={openImportDiagramDialog}
+                        >
+                            {t('new_diagram_dialog.import_from_file')}
+                        </Button>
+                    )}
+                </div>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                     <Button
                         type="button"

@@ -241,10 +241,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     return;
                 }
 
-                if (!hasExistingDiagram) {
-                    return;
-                }
-
                 if (!open) {
                     closeCreateDiagramDialog();
                 }
@@ -252,7 +248,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         >
             <DialogContent
                 className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
-                showClose={hasExistingDiagram}
+                showClose={true}
                 onInteractOutside={(e) => e.preventDefault()}
                 onEscapeKeyDown={(e) => e.preventDefault()}
             >
