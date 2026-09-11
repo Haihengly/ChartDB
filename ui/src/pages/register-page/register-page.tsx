@@ -22,10 +22,16 @@ export const RegisterPage: React.FC = () => {
             met: username.length >= 3 && username.length <= 30,
         },
         {
-            label: 'Letters, numbers, underscore, or hyphen only',
-            met: /^[a-zA-Z0-9_-]+$/.test(username),
+            label: 'Letters, numbers, underscore, hyphen, or period',
+            met: /^[a-zA-Z0-9_.-]+$/.test(username),
         },
-        { label: 'No spaces', met: !/\s/.test(username) },
+        {
+            label: 'No periods at start/end or consecutive',
+            met:
+                !username.startsWith('.') &&
+                !username.endsWith('.') &&
+                !username.includes('..'),
+        },
     ];
 
     const passwordRequirements = [
@@ -49,10 +55,20 @@ export const RegisterPage: React.FC = () => {
             return;
         }
 
-        if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+        if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
             setError(
-                'Username must contain only letters, numbers, underscores, or hyphens'
+                'Username must contain only letters, numbers, underscores, hyphens, or periods'
             );
+            return;
+        }
+
+        if (username.startsWith('.') || username.endsWith('.')) {
+            setError('Username cannot start or end with a period');
+            return;
+        }
+
+        if (username.includes('..')) {
+            setError('Username cannot contain consecutive periods');
             return;
         }
 
