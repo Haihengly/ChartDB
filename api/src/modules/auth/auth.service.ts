@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { email, password } = registerDto;
+    const { email, password, username } = registerDto;
 
     // Validate password
     if (!password || password.length < 8) {
@@ -32,18 +32,29 @@ export class AuthService {
       throw new BadRequestException('Password must be at least 8 characters and include uppercase, lowercase, and a number');
     }
 
-    const existing = await this.usersRepository.findOne({
+    // Check email uniqueness
+    const existingEmail = await this.usersRepository.findOne({
       where: { email },
     });
 
-    if (existing) {
+    if (existingEmail) {
       throw new ConflictException('Email already exists');
+    }
+
+    // Check username uniqueness
+    const existingUsername = await this.usersRepository.findOne({
+      where: { username },
+    });
+
+    if (existingUsername) {
+      throw new ConflictException('Username already exists');
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     const user = this.usersRepository.create({
       email: registerDto.email,
       password: hashedPassword,
+      username: registerDto.username,
     });
 
     const savedUser = await this.usersRepository.save(user);
@@ -57,22 +68,37 @@ export class AuthService {
       user: {
         id: savedUser.id,
         email: savedUser.email,
+        username: savedUser.username,
       },
     };
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersRepository
-      .createQueryBuilder('user')
-      .addSelect('user.password')
-      .where('user.email = :email', { email: loginDto.email })
-      .getOne();
+    const { emailOrUsername, password } = loginDto;
+
+    // Determine if input is email or username (check for @ symbol)
+    const isEmail = emailOrUsername.includes('@');
+
+    let user;
+    if (isEmail) {
+      user = await this.usersRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where('user.email = :email', { email: emailOrUsername })
+        .getOne();
+    } else {
+      user = await this.usersRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where('user.username = :username', { username: emailOrUsername })
+        .getOne();
+    }
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isMatch = await bcrypt.compare(loginDto.password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -83,6 +109,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
+        username: user.username,
       },
     };
   }

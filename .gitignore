@@ -52,6 +52,7 @@ coverage/
 
 # Project-specific excludes
 CLAUDE.md
+MEMORY.md
 .claude/
 sql/
 plan.mddist/

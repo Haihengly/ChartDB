@@ -6,7 +6,7 @@ import { AuthLayout } from '@/components/auth-layout/auth-layout';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState('');
+    const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export const LoginPage: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ emailOrUsername, password }),
             });
 
             const data = await res.json();
@@ -60,12 +60,14 @@ export const LoginPage: React.FC = () => {
                     <div>
                         <div className="relative">
                             <input
-                                type="email"
+                                type="text"
                                 required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={emailOrUsername}
+                                onChange={(e) =>
+                                    setEmailOrUsername(e.target.value)
+                                }
                                 className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
-                                placeholder="Email"
+                                placeholder="Email or Username"
                             />
                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
                                 <Mail className="size-5 text-blue-600 dark:text-blue-400" />

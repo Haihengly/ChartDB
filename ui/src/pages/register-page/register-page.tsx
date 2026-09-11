@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Eye, EyeOff, Check, X } from 'lucide-react';
+import { Mail, Eye, EyeOff, Check, X, User } from 'lucide-react';
 import { AuthLayout } from '@/components/auth-layout/auth-layout';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,18 @@ export const RegisterPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const usernameRequirements = [
+        {
+            label: '3-30 characters',
+            met: username.length >= 3 && username.length <= 30,
+        },
+        {
+            label: 'Letters, numbers, underscore, or hyphen only',
+            met: /^[a-zA-Z0-9_-]+$/.test(username),
+        },
+        { label: 'No spaces', met: !/\s/.test(username) },
+    ];
 
     const passwordRequirements = [
         { label: '8 characters', met: password.length >= 8 },
@@ -31,6 +44,18 @@ export const RegisterPage: React.FC = () => {
             return;
         }
 
+        if (username.length < 3 || username.length > 30) {
+            setError('Username must be 3-30 characters');
+            return;
+        }
+
+        if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+            setError(
+                'Username must contain only letters, numbers, underscores, or hyphens'
+            );
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -39,7 +64,7 @@ export const RegisterPage: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, username, password }),
             });
 
             const data = await res.json();
@@ -85,6 +110,41 @@ export const RegisterPage: React.FC = () => {
                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
                                 <Mail className="size-5 text-blue-600 dark:text-blue-400" />
                             </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                required
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="block w-full border-0 border-b-2 border-blue-500 bg-transparent py-2.5 pl-0 pr-10 text-slate-800 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-blue-500 dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+                                placeholder="Username"
+                            />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+                                <User className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                        </div>
+                        <div className="mt-2.5 space-y-1.5 text-xs">
+                            {usernameRequirements.map((req, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex items-center gap-1.5 transition-colors ${
+                                        req.met
+                                            ? 'font-medium text-emerald-600 dark:text-emerald-400'
+                                            : 'text-slate-400 dark:text-zinc-500'
+                                    }`}
+                                >
+                                    {req.met ? (
+                                        <Check className="size-3.5 stroke-[2.5]" />
+                                    ) : (
+                                        <X className="size-3.5" />
+                                    )}
+                                    <span>{req.label}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 

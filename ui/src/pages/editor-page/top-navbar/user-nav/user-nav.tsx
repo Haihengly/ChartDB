@@ -58,7 +58,9 @@ export const UserNav: React.FC = () => {
                         </button>
                     </DropdownMenuTrigger>
                 </TooltipTrigger>
-                <TooltipContent>{user?.email || 'Account'}</TooltipContent>
+                <TooltipContent>
+                    {user?.username || user?.email || 'Account'}
+                </TooltipContent>
             </Tooltip>
             <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel className="font-normal">
@@ -66,9 +68,14 @@ export const UserNav: React.FC = () => {
                         <p className="text-sm font-medium leading-none">
                             Signed in as
                         </p>
-                        <p className="truncate text-xs leading-none text-muted-foreground">
-                            {user?.email || 'User'}
+                        <p className="truncate text-sm font-medium leading-none">
+                            {user?.username || user?.email || 'User'}
                         </p>
+                        {user?.username && user?.email && (
+                            <p className="truncate text-xs leading-none text-muted-foreground">
+                                {user.email}
+                            </p>
+                        )}
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
